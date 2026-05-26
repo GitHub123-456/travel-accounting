@@ -1,6 +1,6 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const db = require('../config/database');
+const { query } = require('../config/database');
 const ResponseUtil = require('../utils/response');
 
 class AuthController {
@@ -15,9 +15,9 @@ class AuthController {
       }
 
       // 检查账号是否已存在
-      const [existingUsers] = await db.query(
-        'SELECT id FROM users WHERE email = ? OR phone = ?',
-        [email || '', phone || '']
+      const [existingUsers] = await query(
+        'SELECT id FROM users WHERE email = $1 OR phone = $1',
+        [email || phone || '']
       );
 
       if (existingUsers.length > 0) {
@@ -28,28 +28,30 @@ class AuthController {
       const hashedPassword = await bcrypt.hash(password, 10);
 
       // 插入用户
-      const [result] = await db.query(
-        'INSERT INTO users (email, phone, password, nickname) VALUES (?, ?, ?, ?)',
+      const [newUsers] = await query(
+        'INSERT INTO users (email, phone, password, nickname) VALUES ($1, $2, $3, $4) RETURNING id',
         [email || null, phone || null, hashedPassword, nickname]
       );
 
+      const userId = newUsers[0].id;
+
       // 生成 token
       const token = jwt.sign(
-        { userId: result.insertId },
+        { userId },
         process.env.JWT_SECRET,
         { expiresIn: process.env.JWT_EXPIRES_IN || '7d' }
       );
 
       // 自动关联匹配邮箱的参与人记录
       if (email) {
-        await db.query(
-          'UPDATE participants SET user_id = ? WHERE email = ? AND user_id IS NULL',
-          [result.insertId, email]
+        await query(
+          'UPDATE participants SET user_id = $1 WHERE email = $2 AND user_id IS NULL',
+          [userId, email]
         );
       }
 
       return ResponseUtil.success(res, {
-        userId: result.insertId,
+        userId,
         token
       }, '注册成功');
     } catch (error) {
@@ -68,9 +70,9 @@ class AuthController {
       }
 
       // 查询用户
-      const [users] = await db.query(
-        'SELECT * FROM users WHERE email = ? OR phone = ?',
-        [account, account]
+      const [users] = await query(
+        'SELECT * FROM users WHERE email = $1 OR phone = $1',
+        [account]
       );
 
       if (users.length === 0) {
@@ -94,8 +96,8 @@ class AuthController {
 
       // 自动关联匹配邮箱的参与人记录
       if (user.email) {
-        await db.query(
-          'UPDATE participants SET user_id = ? WHERE email = ? AND user_id IS NULL',
+        await query(
+          'UPDATE participants SET user_id = $1 WHERE email = $2 AND user_id IS NULL',
           [user.id, user.email]
         );
       }
