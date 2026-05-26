@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<style>
+body { display: flex; justify-content: center; padding: 40px; background: #eee; }
+.receipt {
+  width: 300px; background: white; padding: 24px; font-family: 'Courier New', monospace;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15); border-radius: 4px;
+}
+.receipt h2 { text-align: center; margin: 0 0 4px; font-size: 18px; }
+.receipt .sub { text-align: center; font-size: 12px; color: #666; margin-bottom: 12px; }
+.divider { border-top: 1px dashed #ccc; margin: 10px 0; }
+.item { display: flex; justify-content: space-between; font-size: 14px; margin: 6px 0; }
+.total { display: flex; justify-content: space-between; font-size: 16px; font-weight: bold; margin: 8px 0; }
+.footer { text-align: center; font-size: 11px; color: #999; margin-top: 12px; }
+</style>
+</head>
+<body>
+<div class="receipt">
+  <h2>东京拉面一兰</h2>
+  <div class="sub">東京都渋谷区神宮前1-2-3</div>
+  <div class="sub">2026/04/27 12:35</div>
+  <div class="divider"></div>
+  <div class="item"><span>豚骨拉面 x2</span><span>¥1,960</span></div>
+  <div class="item"><span>煎饺 x1</span><span>¥490</span></div>
+  <div class="item"><span>生啤 x2</span><span>¥980</span></div>
+  <div class="item"><span>替玉 x1</span><span>¥210</span></div>
+  <div class="divider"></div>
+  <div class="item"><span>小计</span><span>¥3,640</span></div>
+  <div class="item"><span>消費税 (10%)</span><span>¥364</span></div>
+  <div class="divider"></div>
+  <div class="total"><span>合計</span><span>¥4,004</span></div>
+  <div class="divider"></div>
+  <div class="item"><span>お支払い: 現金</span><span>¥5,000</span></div>
+  <div class="item"><span>お釣り</span><span>¥996</span></div>
+  <div class="divider"></div>
+  <div class="footer">ありがとうございました<br>Thank you!</div>
+</div>
+</body>
+</html>

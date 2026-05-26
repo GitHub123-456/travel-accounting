@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>旅行记账系统 - UI自动化测试报告</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f0f2f5; color: #333; }
+.header { background: linear-gradient(135deg, #C8E64E 0%, #A8C43A 100%); color: white; padding: 32px 24px; }
+.header h1 { font-size: 22px; font-weight: 600; margin-bottom: 4px; }
+.header p { font-size: 13px; opacity: 0.85; }
+.summary { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; padding: 16px 24px; margin-top: -24px; }
+.summary-card { background: white; border-radius: 12px; padding: 16px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.summary-card .number { font-size: 28px; font-weight: 700; }
+.summary-card .label { font-size: 12px; color: #999; margin-top: 4px; }
+.summary-card.passed .number { color: #52c41a; }
+.summary-card.failed .number { color: #ff4d4f; }
+.summary-card.total .number { color: #1890ff; }
+.summary-card.rate .number { color: #faad14; }
+.info-bar { display: flex; justify-content: space-between; padding: 12px 24px; font-size: 12px; color: #999; }
+.content { padding: 0 16px 24px; }
+.module { background: white; border-radius: 12px; margin-bottom: 12px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.06); }
+.module-header { display: flex; align-items: center; gap: 8px; padding: 14px 16px; cursor: pointer; user-select: none; border-bottom: 1px solid #f5f5f5; }
+.module-header:hover { background: #fafafa; }
+.module-icon { font-size: 16px; }
+.module-name { flex: 1; font-size: 14px; font-weight: 500; }
+.module-stats { font-size: 12px; color: #999; }
+.toggle-icon { font-size: 10px; color: #ccc; transition: transform 0.2s; }
+.module.collapsed .toggle-icon { transform: rotate(-90deg); }
+.module.collapsed .test-table { display: none; }
+.test-table { width: 100%; border-collapse: collapse; }
+.test-row td { padding: 10px 16px; border-bottom: 1px solid #f8f8f8; font-size: 13px; }
+.test-row .icon { width: 30px; text-align: center; }
+.test-row .name { color: #333; }
+.test-row .duration { width: 60px; text-align: right; color: #bbb; font-size: 12px; }
+.test-row .status { width: 70px; text-align: center; font-size: 11px; font-weight: 600; border-radius: 4px; }
+.status-passed { color: #52c41a; }
+.status-failed { color: #ff4d4f; }
+.status-skipped { color: #faad14; }
+.test-row.failed { background: #fff2f0; }
+.fail-detail { padding: 8px 16px 12px; }
+.fail-detail pre { font-size: 11px; color: #ff4d4f; background: #fff8f6; padding: 12px; border-radius: 8px; overflow-x: auto; white-space: pre-wrap; word-break: break-all; max-height: 200px; overflow-y: auto; }
+.detail-row td { padding: 0 !important; border: none !important; }
+</style>
+</head>
+<body>
+<div class="header">
+    <h1>🚀 旅行记账系统 - UI自动化测试报告</h1>
+    <p>Python Playwright E2E Tests</p>
+</div>
+<div class="summary">
+    <div class="summary-card total"><div class="number">126</div><div class="label">总用例</div></div>
+    <div class="summary-card passed"><div class="number">104</div><div class="label">通过</div></div>
+    <div class="summary-card failed"><div class="number">22</div><div class="label">失败</div></div>
+    <div class="summary-card rate"><div class="number">82.5%</div><div class="label">通过率</div></div>
+</div>
+<div class="info-bar">
+    <span>⏱️ 耗时 316.7s</span>
+    <span>📅 2026-04-27 17:46:18</span>
+</div>
+<div class="content">
+    <h2>测试结果摘要</h2>
+    <p>总测试用例: 126个</p>
+    <p>通过: 104个 (82.5%)</p>
+    <p>失败: 22个 (17.5%)</p>
+    <p>主要问题:</p>
+    <ul>
+        <li>Playwright strict mode violation - 多个元素匹配相同选择器</li>
+        <li>UI元素定位问题 - 需要更精确的选择器</li>
+        <li>API响应验证问题 - 部分API返回500错误</li>
+    </ul>
+    <p>建议修复:</p>
+    <ol>
+        <li>更新Playwright选择器，使用更精确的定位方式</li>
+        <li>修复API端点的错误处理</li>
+        <li>优化UI组件的唯一标识</li>
+    </ol>
+</div>
+</body>
+</html>

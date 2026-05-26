@@ -1,0 +1,3292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>旅行记账系统 - 项目文档</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;background:#f5f5f5;color:#333}
+.header{background:#1A1A2E;color:#fff;padding:24px 0 0;text-align:center;position:sticky;top:0;z-index:10}
+.header h1{font-size:22px;font-weight:700;margin-bottom:4px;display:inline;vertical-align:middle}
+.header p{font-size:12px;opacity:.8;margin-bottom:16px}
+.tabs{display:flex;justify-content:center;gap:0;background:rgba(255,255,255,.05);padding:0 16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex-shrink:0;padding:10px 18px;font-size:13px;color:rgba(255,255,255,.7);cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s}
+.tab:hover{color:#fff}
+.tab.active{color:#C8E64E;border-bottom-color:#C8E64E;font-weight:600}
+.main{max-width:860px;margin:24px auto;padding:0 20px 60px}
+.doc-content{display:none;background:#fff;border-radius:12px;padding:32px 28px;box-shadow:0 1px 6px rgba(0,0,0,.06)}
+.doc-content.active{display:block}
+.doc-content h1{font-size:22px;font-weight:700;color:#222;margin:0 0 16px;padding-bottom:12px;border-bottom:2px solid #C8E64E}
+.doc-content h2{font-size:18px;font-weight:600;color:#333;margin:28px 0 12px;padding-bottom:8px;border-bottom:1px solid #f0f0f0}
+.doc-content h3{font-size:15px;font-weight:600;color:#444;margin:20px 0 8px}
+.doc-content p{font-size:14px;line-height:1.8;margin:8px 0;color:#444}
+.doc-content ul,.doc-content ol{padding-left:20px;margin:8px 0}
+.doc-content li{font-size:14px;line-height:1.8;color:#444;margin:4px 0}
+.doc-content table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+.doc-content th,.doc-content td{padding:8px 12px;border:1px solid #eee;text-align:left}
+.doc-content th{background:#f8f9fa;font-weight:600;color:#333}
+.doc-content tr:nth-child(even){background:#fafafa}
+.doc-content code{background:#f0f4f8;color:#e74c3c;padding:2px 6px;border-radius:4px;font-size:13px;font-family:"SF Mono",Consolas,monospace}
+.doc-content pre{background:#1e1e2e;color:#cdd6f4;padding:16px;border-radius:8px;overflow-x:auto;margin:12px 0;font-size:13px;line-height:1.6}
+.doc-content pre code{background:none;color:inherit;padding:0}
+.doc-content blockquote{border-left:3px solid #C8E64E;padding:8px 16px;margin:12px 0;background:#F5F8E8;border-radius:0 8px 8px 0}
+.doc-content hr{border:none;border-top:1px solid #eee;margin:24px 0}
+.doc-content a{color:#C8E64E;text-decoration:none}
+.doc-content strong{color:#222}
+@media(max-width:600px){.main{padding:0 10px 40px}.doc-content{padding:18px 14px}.tab{padding:10px 12px;font-size:12px}}
+</style>
+</head>
+<body>
+<div class="header">
+  <div style="display:flex;align-items:center;justify-content:center;gap:10px;margin-bottom:4px">
+    <img src="logo.svg" alt="logo" style="width:40px;height:40px;border-radius:10px">
+    <h1>旅行记账系统</h1>
+  </div>
+  <p>项目文档中心</p>
+  <div class="tabs"><div class="tab active" onclick="switchTab('prd')">📋 产品需求文档</div>
+<div class="tab" onclick="switchTab('user_guide')">📖 用户使用手册</div>
+<div class="tab" onclick="switchTab('tech_design')">🏗 技术设计文档</div>
+<div class="tab" onclick="switchTab('api')">🔲 API 接口文档</div>
+<div class="tab" onclick="switchTab('database')">🗄 数据库文档</div>
+<div class="tab" onclick="switchTab('test_plan')">🧪 测试计划</div>
+</div>
+</div>
+<div class="main"><div class="doc-content active" id="prd"><h1>产品需求文档（PRD）</h1>
+<h2>1. 项目背景</h2>
+<p>旅行记账是一个移动端优先的旅行费用追踪应用，旨在帮助用户在多次旅行中管理费用，支持多币种记账和多人分账。随着出境游的普及，旅行者面临多币种消费、多人AA分账等复杂场景，传统记账工具无法满足需求。本产品针对这些痛点，提供一站式旅行财务管理方案。</p>
+<h2>2. 目标用户</h2>
+<table>
+<thead>
+<tr>
+<th>用户类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>个人旅行者</td>
+<td>需要记录多币种消费、管理旅行预算</td>
+</tr>
+<tr>
+<td>团队出行组织者</td>
+<td>需要管理多人共同消费、计算分账</td>
+</tr>
+<tr>
+<td>频繁出差人员</td>
+<td>需要按行程分类管理费用</td>
+</tr>
+<tr>
+<td>背包客/自由行爱好者</td>
+<td>需要轻量化、移动端友好的记账工具</td>
+</tr>
+</tbody></table>
+<h2>3. 迭代功能规划</h2>
+<h3>v1.0 - 基础记账 (2026-03)</h3>
+<h4>核心功能</h4>
+<ul>
+<li>用户注册/登录（邮箱、手机号）</li>
+<li>验证码找回密码</li>
+<li>创建旅行账本（名称、目的地、日期、预算）</li>
+<li>账本列表和详情查看</li>
+<li>编辑/删除账本</li>
+<li>手动记账（金额、分类、时间、地点、备注）</li>
+<li>消费分类：餐饮、交通、住宿、购物、门票、其他</li>
+<li>交易列表和详情查看</li>
+<li>编辑/删除交易</li>
+<li>个人中心（昵称、头像、默认本币）</li>
+<li>头像上传</li>
+</ul>
+<h4>技术基础</h4>
+<ul>
+<li>React 18 + Vite 前端架构</li>
+<li>Ant Design Mobile 移动端 UI</li>
+<li>Node.js + Express 后端</li>
+<li>MySQL 8.0 数据存储</li>
+<li>JWT 认证方案</li>
+<li>RESTful API 设计</li>
+<li>Axios 请求拦截器</li>
+<li>Multer 文件上传</li>
+</ul>
+<hr>
+<h3>v1.1 - 多人分账 (2026-03)</h3>
+<h4>新增功能</h4>
+<ul>
+<li>参与人管理（添加、编辑、删除旅行成员）</li>
+<li>共同账单类型（区分个人/共同消费）</li>
+<li>指定付款人和参与人</li>
+<li>自动分账计算（应付/实付/差额）</li>
+<li>个人分账视图</li>
+<li>参与人结算状态标记（已结清/未结清）</li>
+<li>账本封存功能（旅行结束后锁定为只读）</li>
+</ul>
+<h4>优化</h4>
+<ul>
+<li>交易表单增加账单类型切换</li>
+<li>账本详情增加分账入口</li>
+<li>封存账本 UI 标识</li>
+</ul>
+<hr>
+<h3>v1.2 - 多币种汇率管理 (2026-03)</h3>
+<h4>新增功能</h4>
+<ul>
+<li>按账本独立设置汇率</li>
+<li>支持多种常用币种（CNY、USD、JPY、EUR、GBP、THB、KRW 等）</li>
+<li>外币交易自动换算本币金额</li>
+<li>汇率变更后自动重算所有相关交易</li>
+<li>币种统计视图</li>
+</ul>
+<h4>优化</h4>
+<ul>
+<li>交易表单增加币种选择器</li>
+<li>账本详情展示多币种消费明细</li>
+<li>金额显示优化（整数不显示小数位）</li>
+</ul>
+<hr>
+<h3>v1.3 - AI 智能记账 (2026-04)</h3>
+<h4>新增功能</h4>
+<ul>
+<li>AI 对话式记账功能（基于通义千问 qwen-turbo）</li>
+<li>支持自然语言描述消费，AI 自动解析金额、分类、币种</li>
+<li>支持拍照上传小票/账单，AI 视觉识别（qwen-vl-plus）</li>
+<li>AI 自动识别付款人和参与人（基于账本成员列表）</li>
+<li>AI 识别分摊关键词（AA、大家分、一起）自动设为共同账单</li>
+<li>对话式交互，支持多轮修正</li>
+<li>图片压缩处理，优化上传体验</li>
+</ul>
+<h4>技术</h4>
+<ul>
+<li>集成阿里云 DashScope API</li>
+<li>支持文本模型和视觉多模态模型切换</li>
+<li>结构化 JSON 输出解析</li>
+</ul>
+<hr>
+<h3>v1.4 - UI 优化与卡片布局 (2026-04)</h3>
+<h4>新增功能</h4>
+<ul>
+<li>账本列表改为网格卡片布局，视觉效果更佳</li>
+<li>支持账本自定义封面图上传（长按卡片触发）</li>
+<li>系统自动生成渐变色封面和旅行图标</li>
+<li>账本卡片展示目的地、日期、总花费、成员数</li>
+<li>个人中心页面 UI 重构，信息展示更清晰</li>
+</ul>
+<h4>优化</h4>
+<ul>
+<li>交易表单 UI 优化，操作更流畅</li>
+<li>汇率管理组件交互改进</li>
+<li>成员管理组件样式统一</li>
+<li>搜索栏集成到导航区域</li>
+<li>空状态页面引导优化</li>
+</ul>
+<hr>
+<h3>v1.5 - AI 旅行攻略 &amp; 体验升级 (2026-04)</h3>
+<h4>新增功能</h4>
+<ul>
+<li>AI 旅行攻略生成功能：输入城市、天数、预算、出行类型，AI 自动生成详细攻略</li>
+<li>攻略包含每日行程、美食推荐、住宿建议、避坑提醒、预算预估</li>
+<li>AI 修改攻略：用自然语言描述修改需求，AI 自动调整攻略内容</li>
+<li>攻略管理：保存、查看列表、查看详情、编辑、删除</li>
+<li>一键从攻略创建关联账本，自动填入目的地、天数和预算</li>
+<li>更新攻略时自动同步关联账本的名称、预算、日期等信息</li>
+<li>邮箱直接重置密码（无需验证码），登录页底部弹窗交互</li>
+<li>人均预算展示：预算按人均显示（总预算/成员数），进度条显示当前用户消费占比</li>
+<li>账本成员编辑权限开放：所有成员均可编辑和删除交易，不限于创建者</li>
+</ul>
+<h4>UI 改版</h4>
+<ul>
+<li>全局主题切换为浅绿色系：页面背景 #E8F5C8/#F2F8E0，深色头部/卡片 #1A1A2E，黄绿色强调色 #C8E64E</li>
+<li>登录页重新设计：胶囊形输入框、自定义 SVG Logo</li>
+<li>忘记密码改为底部弹窗交互</li>
+</ul>
+<h4>技术</h4>
+<ul>
+<li>新增 <code>travel_guides</code> 数据表（自动创建）</li>
+<li>新增 AI 攻略相关 API 端点（生成、修改、CRUD）</li>
+<li>新增邮箱直接重置密码 API 端点</li>
+<li>前端新增 <code>AITravelGuide.jsx</code> 组件</li>
+<li>前端 API 层新增 <code>ai.js</code> 攻略相关接口</li>
+</ul>
+<hr>
+<h2>4. 核心功能列表（当前版本 v1.5）</h2>
+<h3>4.1 用户认证</h3>
+<ul>
+<li>邮箱/手机号注册</li>
+<li>邮箱/手机号登录</li>
+<li>验证码找回密码</li>
+<li>邮箱直接重置密码（无需验证码）</li>
+<li>JWT Token 认证</li>
+</ul>
+<h3>4.2 账本管理</h3>
+<ul>
+<li>创建旅行账本（名称、目的地、日期、人均预算）</li>
+<li>账本列表展示（卡片网格布局、封面图）</li>
+<li>账本详情查看</li>
+<li>编辑/删除账本</li>
+<li>封存已完成旅行（只读模式）</li>
+<li>自定义封面图上传</li>
+</ul>
+<h3>4.3 成员管理</h3>
+<ul>
+<li>添加旅行参与人</li>
+<li>编辑/删除参与人</li>
+<li>参与人结算状态标记</li>
+</ul>
+<h3>4.4 汇率管理</h3>
+<ul>
+<li>按账本设置币种汇率</li>
+<li>支持多币种（CNY、USD、JPY、EUR、GBP、THB 等）</li>
+<li>汇率变更自动重算相关交易</li>
+</ul>
+<h3>4.5 记账功能</h3>
+<ul>
+<li>手动记账（金额、币种、分类、时间、地点、备注）</li>
+<li>AI 智能记账（自然语言描述 → 自动解析）</li>
+<li>AI 图片记账（拍照小票 → OCR 识别）</li>
+<li>个人账单 / 共同账单区分</li>
+<li>指定付款人和参与人</li>
+<li>消费分类：餐饮、交通、住宿、购物、门票、其他</li>
+</ul>
+<h3>4.6 分账结算</h3>
+<ul>
+<li>自动计算每人应付/实付/差额</li>
+<li>个人分账视图</li>
+<li>结算状态管理</li>
+</ul>
+<h3>4.7 统计分析</h3>
+<ul>
+<li>按分类统计消费</li>
+<li>按币种统计消费</li>
+<li>总支出/个人支出/共同支出汇总</li>
+</ul>
+<h3>4.8 个人中心</h3>
+<ul>
+<li>查看/编辑个人信息</li>
+<li>修改昵称</li>
+<li>上传头像</li>
+<li>设置默认本币</li>
+</ul>
+<h3>4.9 AI 旅行攻略</h3>
+<ul>
+<li>输入城市、天数、人均预算、出行类型、出发地，AI 自动生成旅行攻略</li>
+<li>攻略包含每日行程安排（含人均费用明细）、往返交通估算、美食推荐、住宿建议、避坑提醒、人均预算预估</li>
+<li>攻略保存到数据库，支持查看、编辑、删除</li>
+<li>AI 根据自然语言需求修改已有攻略</li>
+<li>一键从攻略创建关联账本，自动同步攻略信息到账本</li>
+</ul>
+<h2>5. 用户故事</h2>
+<h3>账本管理</h3>
+<ul>
+<li>作为用户，我想创建一个旅行账本，以便按行程分类管理费用</li>
+<li>作为用户，我想封存已结束的旅行账本，防止误操作修改历史数据</li>
+<li>作为用户，我想为账本设置封面图，让账本列表更美观直观</li>
+</ul>
+<h3>记账</h3>
+<ul>
+<li>作为用户，我想快速记录一笔消费，包括金额、币种和分类</li>
+<li>作为用户，我想用自然语言描述消费（如&quot;午餐花了80&quot;），让AI自动解析</li>
+<li>作为用户，我想拍照上传小票，让AI自动识别消费信息</li>
+<li>作为用户，我想记录共同消费并指定参与人，以便后续分账</li>
+</ul>
+<h3>分账</h3>
+<ul>
+<li>作为用户，我想查看每个人应付多少钱，以便旅行结束后结算</li>
+<li>作为用户，我想标记某人已结清，方便追踪结算进度</li>
+</ul>
+<h3>AI 旅行攻略</h3>
+<ul>
+<li>作为用户，我想输入目的地和天数，让 AI 自动生成旅行攻略，省去手动规划的时间</li>
+<li>作为用户，我想查看 AI 生成的每日行程、美食推荐和人均预算预估，方便旅行参考</li>
+<li>作为用户，我想用自然语言告诉 AI 修改攻略（如&quot;把第二天改成逛博物馆&quot;），无需手动编辑</li>
+<li>作为用户，我想从攻略一键创建账本，自动填入目的地、天数和人均预算信息</li>
+<li>作为用户，我想保存多份攻略，方便后续查看和对比</li>
+</ul>
+<h3>密码重置</h3>
+<ul>
+<li>作为用户，我想通过邮箱直接重置密码，无需等待验证码</li>
+</ul>
+<h3>多币种</h3>
+<ul>
+<li>作为用户，我想设置当地货币汇率，让系统自动换算为本币金额</li>
+<li>作为用户，我想查看不同币种的消费明细</li>
+</ul>
+<h2>6. 业务规则</h2>
+<table>
+<thead>
+<tr>
+<th>规则</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>封存只读</td>
+<td>已封存账本不允许新增、编辑、删除交易和成员</td>
+</tr>
+<tr>
+<td>均摊分账</td>
+<td>共同账单在参与人之间平均分摊</td>
+</tr>
+<tr>
+<td>双币存储</td>
+<td>所有金额同时存储原币金额和本币金额</td>
+</tr>
+<tr>
+<td>汇率联动</td>
+<td>汇率变更触发该币种所有交易的本币金额重算</td>
+</tr>
+<tr>
+<td>付款人包含</td>
+<td>共同账单的付款人自动包含在参与人列表中</td>
+</tr>
+<tr>
+<td>默认参与</td>
+<td>共同账单未指定参与人时，默认所有成员参与</td>
+</tr>
+<tr>
+<td>金额精度</td>
+<td>金额使用 decimal(12,2) 存储，确保精度</td>
+</tr>
+<tr>
+<td>人均预算</td>
+<td>预算字段存储人均金额，详情页显示&quot;我的预算&quot;进度条，展示当前用户实际消费占比</td>
+</tr>
+<tr>
+<td>成员编辑权限</td>
+<td>账本所有成员（创建者和参与者）均可编辑账本信息和交易</td>
+</tr>
+<tr>
+<td>攻略账本联动</td>
+<td>更新攻略内容时自动同步关联账本的名称、预算、日期等信息</td>
+</tr>
+</tbody></table>
+<h2>7. 非功能需求</h2>
+<h3>7.1 性能</h3>
+<ul>
+<li>页面首屏加载时间 &lt; 2秒</li>
+<li>API 响应时间 &lt; 500ms（常规操作）</li>
+<li>AI 解析响应时间 &lt; 5秒</li>
+</ul>
+<h3>7.2 安全</h3>
+<ul>
+<li>密码 bcrypt 加密存储</li>
+<li>JWT Token 认证，支持过期机制</li>
+<li>SQL 参数化查询防注入</li>
+<li>文件上传类型和大小限制（10MB）</li>
+</ul>
+<h3>7.3 兼容性</h3>
+<ul>
+<li>移动端浏览器优先（iOS Safari、Android Chrome）</li>
+<li>响应式布局适配不同屏幕尺寸</li>
+<li>支持微信内置浏览器</li>
+</ul>
+<h3>7.4 可用性</h3>
+<ul>
+<li>中文界面</li>
+<li>移动端触控友好</li>
+<li>操作反馈及时（Toast 提示）</li>
+</ul>
+<h3>7.5 可维护性</h3>
+<ul>
+<li>前后端分离架构</li>
+<li>RESTful API 设计</li>
+<li>统一响应格式</li>
+<li>模块化代码组织</li>
+</ul>
+</div>
+<div class="doc-content" id="user_guide"><h1>用户使用手册</h1>
+<h2>1. 快速开始</h2>
+<p>旅行记账是一款移动端优先的旅行费用管理应用。你可以用它来：</p>
+<ul>
+<li>按旅行创建独立账本</li>
+<li>记录多币种消费</li>
+<li>多人分账自动计算</li>
+<li>AI 智能语音/图片记账</li>
+<li>AI 旅行攻略生成</li>
+</ul>
+<p>打开应用后，注册账号即可开始使用。</p>
+<h3>界面风格</h3>
+<p>应用采用清新的浅绿色主题设计：</p>
+<ul>
+<li>浅绿色背景（#E8F5C8 / #F2F8E0）</li>
+<li>深色头部和卡片（#1A1A2E）</li>
+<li>黄绿色强调色（#C8E64E）</li>
+<li>登录页采用胶囊形输入框设计，配有自定义 SVG Logo</li>
+</ul>
+<h2>2. 注册登录</h2>
+<h3>注册新账号</h3>
+<ol>
+<li>打开应用，点击「注册」</li>
+<li>填写以下信息：<ul>
+<li>昵称（必填）</li>
+<li>邮箱或手机号（至少填一项）</li>
+<li>密码（必填）</li>
+</ul>
+</li>
+<li>点击「注册」完成</li>
+</ol>
+<h3>登录</h3>
+<ol>
+<li>输入邮箱/手机号和密码</li>
+<li>点击「登录」</li>
+</ol>
+<h3>忘记密码</h3>
+<ol>
+<li>在登录页底部点击「忘记密码」</li>
+<li>弹出底部弹窗，输入注册邮箱</li>
+<li>输入新密码</li>
+<li>点击「重置密码」完成</li>
+</ol>
+<blockquote>
+<p>注：直接通过邮箱重置密码，无需验证码。</p>
+</blockquote>
+<h2>3. 创建账本</h2>
+<p>账本是按旅行组织费用的容器，每次旅行建议创建一个独立账本。</p>
+<h3>创建步骤</h3>
+<ol>
+<li>在首页点击右下角「+」按钮或网格中的「新建账本」卡片</li>
+<li>填写账本信息：<ul>
+<li><strong>旅行名称</strong>：如&quot;日本东京之旅&quot;</li>
+<li><strong>目的地</strong>：如&quot;东京&quot;</li>
+<li><strong>开始日期</strong>：旅行出发日</li>
+<li><strong>结束日期</strong>：旅行返回日</li>
+<li><strong>预算</strong>（可选）：人均预算金额</li>
+<li><strong>备注</strong>（可选）：其他说明</li>
+</ul>
+</li>
+<li>点击「创建」</li>
+</ol>
+<h3>账本封面</h3>
+<ul>
+<li>系统会根据目的地自动生成渐变色封面</li>
+<li>长按账本卡片可上传自定义封面图片</li>
+</ul>
+<h3>搜索账本</h3>
+<ul>
+<li>在首页顶部搜索框输入关键词，可按名称或目的地搜索</li>
+</ul>
+<h2>4. 添加成员</h2>
+<p>多人旅行时，需要先添加参与人才能使用分账功能。</p>
+<h3>添加步骤</h3>
+<ol>
+<li>进入账本详情页</li>
+<li>点击「成员管理」或设置中的「参与人」</li>
+<li>点击「添加成员」</li>
+<li>输入成员姓名和备注（可选）</li>
+<li>点击确认</li>
+</ol>
+<h3>管理成员</h3>
+<ul>
+<li>点击成员可编辑姓名和备注</li>
+<li>左滑或长按可删除成员（已有关联交易的成员无法删除）</li>
+</ul>
+<h2>5. 设置汇率</h2>
+<p>出境旅行时，需要设置当地货币对本币的汇率。</p>
+<h3>设置步骤</h3>
+<ol>
+<li>进入账本详情页</li>
+<li>点击「汇率管理」</li>
+<li>选择币种（如 JPY、USD、EUR）</li>
+<li>输入汇率值（1单位外币 = ?本币）</li>
+<li>保存</li>
+</ol>
+<h3>注意事项</h3>
+<ul>
+<li>汇率以账本为单位独立设置</li>
+<li>修改汇率后，该币种的所有交易会自动重新计算本币金额</li>
+<li>建议在旅行开始前设置好常用币种汇率</li>
+</ul>
+<h2>6. 记账方式</h2>
+<h3>6.1 手动记账</h3>
+<ol>
+<li>在账本详情页点击「+」记账按钮</li>
+<li>填写交易信息：<ul>
+<li><strong>金额</strong>：消费金额</li>
+<li><strong>币种</strong>：选择消费币种</li>
+<li><strong>分类</strong>：餐饮/交通/住宿/购物/门票/其他</li>
+<li><strong>时间</strong>：消费时间</li>
+<li><strong>地点</strong>（可选）：消费地点</li>
+<li><strong>备注</strong>（可选）：补充说明</li>
+</ul>
+</li>
+<li>选择账单类型：<ul>
+<li><strong>个人账单</strong>：仅自己的消费</li>
+<li><strong>共同账单</strong>：多人分摊的消费</li>
+</ul>
+</li>
+<li>共同账单需额外选择：<ul>
+<li>付款人：谁先垫付的</li>
+<li>参与人：哪些人分摊这笔费用</li>
+</ul>
+</li>
+<li>点击「保存」</li>
+</ol>
+<blockquote>
+<p>注：账本的所有成员（创建者和参与者）均可编辑账本信息和交易，不限于账本创建者。</p>
+</blockquote>
+<h3>6.2 AI 智能记账</h3>
+<p>AI 记账让你用自然语言快速记账，无需逐项填写表单。</p>
+<h4>文字记账</h4>
+<ol>
+<li>在账本详情页点击「🤖 AI记账」按钮</li>
+<li>在对话框中输入消费描述，例如：<ul>
+<li>&quot;午餐花了80&quot;</li>
+<li>&quot;打车去机场 150元&quot;</li>
+<li>&quot;张三付的 大家AA 晚餐300&quot;</li>
+<li>&quot;买了两杯咖啡 1000日元&quot;</li>
+</ul>
+</li>
+<li>AI 会自动解析出金额、分类、币种、付款人等信息</li>
+<li>确认无误后点击「保存记账」</li>
+<li>如需修改，继续输入补充信息即可</li>
+</ol>
+<h4>图片记账</h4>
+<ol>
+<li>点击对话框左侧的「📷」按钮</li>
+<li>拍照或选择小票/账单图片</li>
+<li>AI 会自动识别图片中的消费信息</li>
+<li>确认后保存</li>
+</ol>
+<h4>AI 支持的表达方式</h4>
+<table>
+<thead>
+<tr>
+<th>表达</th>
+<th>解析结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>&quot;午餐80&quot;</td>
+<td>金额80，分类餐饮</td>
+</tr>
+<tr>
+<td>&quot;打车去机场150&quot;</td>
+<td>金额150，分类交通</td>
+</tr>
+<tr>
+<td>&quot;张三付的 大家AA 300&quot;</td>
+<td>共同账单，付款人张三，所有人参与</td>
+</tr>
+<tr>
+<td>&quot;住宿两晚 2000日元&quot;</td>
+<td>金额2000，币种JPY，分类住宿</td>
+</tr>
+</tbody></table>
+<h2>7. AI 旅行攻略</h2>
+<p>AI 旅行攻略功能可以根据你的需求自动生成详细的旅行规划。</p>
+<h3>生成攻略</h3>
+<ol>
+<li>在首页点击「AI 旅行攻略」入口</li>
+<li>填写攻略参数：<ul>
+<li><strong>目的地城市</strong>：如&quot;重庆&quot;、&quot;东京&quot;</li>
+<li><strong>出发地</strong>（可选）：如&quot;上海&quot;、&quot;北京&quot;，用于估算往返机票/高铁费用</li>
+<li><strong>旅行天数</strong>：如 3 天</li>
+<li><strong>人数</strong>：出行人数</li>
+<li><strong>人均预算</strong>（可选）：人均预算金额（人民币）</li>
+<li><strong>出行类型</strong>：休闲游、美食游、文化游等</li>
+</ul>
+</li>
+<li>点击「生成攻略」，等待 AI 生成</li>
+</ol>
+<h3>攻略内容</h3>
+<p>AI 生成的攻略包含以下内容：</p>
+<ul>
+<li><strong>每日行程</strong>：按时间段安排的活动、地点、交通方式、人均费用和费用明细</li>
+<li><strong>往返交通</strong>：如填写了出发地，会自动估算往返机票/高铁费用</li>
+<li><strong>美食推荐</strong>：当地特色餐厅和必点菜品</li>
+<li><strong>住宿建议</strong>：推荐住宿区域和价位参考</li>
+<li><strong>避坑提醒</strong>：实用的旅行注意事项</li>
+<li><strong>预算预估</strong>：按往返大交通、住宿、餐饮、当地交通、门票等分类的人均预算汇总，所有金额统一使用人民币</li>
+</ul>
+<h3>修改攻略</h3>
+<ol>
+<li>在攻略详情页，点击「AI 修改」</li>
+<li>用自然语言描述修改需求，例如：<ul>
+<li>&quot;把第二天改成逛博物馆&quot;</li>
+<li>&quot;增加一天去周边古镇&quot;</li>
+<li>&quot;把预算降低到人均 2000&quot;</li>
+</ul>
+</li>
+<li>AI 会根据你的需求重新调整攻略内容</li>
+</ol>
+<h3>管理攻略</h3>
+<ul>
+<li><strong>保存攻略</strong>：生成后点击「保存」，攻略会存储到你的账号下</li>
+<li><strong>查看攻略列表</strong>：在攻略页面查看所有已保存的攻略</li>
+<li><strong>编辑攻略</strong>：点击已保存的攻略可查看详情和修改</li>
+<li><strong>删除攻略</strong>：左滑或点击删除按钮移除攻略</li>
+</ul>
+<h3>一键创建账本</h3>
+<ol>
+<li>在攻略详情页点击「创建账本」</li>
+<li>系统自动创建关联账本，填入目的地、天数和预算信息</li>
+<li>后续修改攻略时，关联账本的信息会自动同步更新</li>
+</ol>
+<h2>8. 查看统计</h2>
+<p>在账本详情页可查看消费统计：</p>
+<ul>
+<li><strong>人均预算</strong>：预算进度条显示当前用户实际消费占人均预算的比例，标注&quot;我的预算&quot;和&quot;已用x%&quot;</li>
+<li><strong>全员总支出</strong>：所有成员所有交易的本币总额</li>
+<li><strong>个人支出</strong>：个人账单总额</li>
+<li><strong>共同支出</strong>：共同账单总额</li>
+<li><strong>分类统计</strong>：按餐饮、交通等分类的消费占比</li>
+<li><strong>币种统计</strong>：按不同币种的消费明细</li>
+</ul>
+<h2>9. 分账结算</h2>
+<p>分账功能自动计算多人旅行中每人的应付金额。</p>
+<h3>查看分账</h3>
+<ol>
+<li>进入账本详情页</li>
+<li>点击「分账」或「结算」</li>
+<li>查看每人的：<ul>
+<li><strong>应付金额</strong>：按均摊计算应承担的费用</li>
+<li><strong>实付金额</strong>：实际垫付的费用</li>
+<li><strong>差额</strong>：正数表示多付（别人欠你），负数表示少付（你欠别人）</li>
+</ul>
+</li>
+</ol>
+<h3>结算操作</h3>
+<ul>
+<li>点击某人的「标记已结清」按钮</li>
+<li>已结清的成员会显示对应标记</li>
+</ul>
+<h3>分账规则</h3>
+<ul>
+<li>共同账单在所有参与人之间平均分摊</li>
+<li>付款人自动包含在参与人中</li>
+<li>未指定参与人的共同账单默认所有成员参与</li>
+</ul>
+<h2>10. 封存账本</h2>
+<p>旅行结束且所有费用结清后，建议封存账本。</p>
+<h3>封存操作</h3>
+<ol>
+<li>进入账本设置</li>
+<li>点击「封存账本」</li>
+<li>确认封存</li>
+</ol>
+<h3>封存效果</h3>
+<ul>
+<li>账本变为只读状态</li>
+<li>不能新增、编辑、删除交易</li>
+<li>不能添加、编辑、删除成员</li>
+<li>不能修改汇率</li>
+<li>账本列表中显示「已封存」标记</li>
+<li>可随时解除封存恢复编辑</li>
+</ul>
+<h2>11. 个人中心</h2>
+<p>在首页右上角点击头像进入个人中心。</p>
+<h3>可管理的信息</h3>
+<ul>
+<li><strong>头像</strong>：点击头像上传新图片</li>
+<li><strong>昵称</strong>：修改显示名称</li>
+<li><strong>默认本币</strong>：设置默认记账本币（如 CNY）</li>
+<li><strong>账号信息</strong>：查看注册邮箱/手机号</li>
+<li><strong>账本数量</strong>：查看已创建的账本总数</li>
+</ul>
+<h3>退出登录</h3>
+<ul>
+<li>在个人中心底部点击「退出登录」</li>
+</ul>
+</div>
+<div class="doc-content" id="tech_design"><h1>技术设计文档</h1>
+<h2>1. 系统架构</h2>
+<pre><code>┌─────────────────────────────────────────────────────┐
+│                    客户端层                           │
+│  ┌───────────────┐  ┌───────────────┐              │
+│  │  移动端浏览器   │  │  微信内置浏览器  │              │
+│  └───────┬───────┘  └───────┬───────┘              │
+└──────────┼──────────────────┼──────────────────────┘
+           │                  │
+           ▼                  ▼
+┌─────────────────────────────────────────────────────┐
+│                   前端应用层                          │
+│  React 18 + Vite + Ant Design Mobile                │
+│  ┌─────────┐ ┌──────────┐ ┌───────────┐           │
+│  │  Pages  │ │Components│ │  API Layer │           │
+│  └─────────┘ └──────────┘ └─────┬─────┘           │
+└──────────────────────────────────┼─────────────────┘
+                                   │ HTTP/JSON
+                                   ▼
+┌─────────────────────────────────────────────────────┐
+│                   后端服务层                          │
+│  Node.js + Express                                  │
+│  ┌────────┐ ┌───────────┐ ┌──────────┐            │
+│  │ Routes │ │Controllers│ │Middleware│            │
+│  └────────┘ └─────┬─────┘ └──────────┘            │
+└───────────────────┼────────────────────────────────┘
+                    │
+        ┌───────────┼───────────┐
+        ▼                       ▼
+┌──────────────┐      ┌──────────────────┐
+│   MySQL 8.0  │      │  通义千问 API     │
+│   数据持久层  │      │  (AI 智能记账/攻略) │
+└──────────────┘      └──────────────────┘
+</code></pre>
+<h3>架构特点</h3>
+<ul>
+<li>前后端分离，通过 RESTful API 通信</li>
+<li>移动端优先的响应式设计</li>
+<li>无状态后端，JWT 认证</li>
+<li>外部 AI 服务集成（通义千问/DashScope）</li>
+</ul>
+<h2>2. 技术选型</h2>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>技术</th>
+<th>选型理由</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>前端框架</td>
+<td>React 18</td>
+<td>组件化开发，生态丰富</td>
+</tr>
+<tr>
+<td>构建工具</td>
+<td>Vite</td>
+<td>极速 HMR，开发体验好</td>
+</tr>
+<tr>
+<td>UI 组件库</td>
+<td>Ant Design Mobile</td>
+<td>移动端专用，组件丰富</td>
+</tr>
+<tr>
+<td>路由</td>
+<td>React Router v6</td>
+<td>声明式路由，嵌套路由支持</td>
+</tr>
+<tr>
+<td>HTTP 客户端</td>
+<td>Axios</td>
+<td>拦截器机制，请求/响应统一处理</td>
+</tr>
+<tr>
+<td>日期处理</td>
+<td>Day.js</td>
+<td>轻量级，API 兼容 Moment.js</td>
+</tr>
+<tr>
+<td>图表</td>
+<td>Recharts</td>
+<td>React 原生图表库</td>
+</tr>
+<tr>
+<td>后端框架</td>
+<td>Express</td>
+<td>轻量灵活，中间件生态丰富</td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>MySQL 8.0</td>
+<td>事务支持，数据一致性保障</td>
+</tr>
+<tr>
+<td>数据库驱动</td>
+<td>mysql2</td>
+<td>Promise 支持，连接池</td>
+</tr>
+<tr>
+<td>认证</td>
+<td>JWT (jsonwebtoken)</td>
+<td>无状态认证，适合前后端分离</td>
+</tr>
+<tr>
+<td>密码加密</td>
+<td>bcryptjs</td>
+<td>安全的密码哈希算法</td>
+</tr>
+<tr>
+<td>文件上传</td>
+<td>Multer</td>
+<td>Express 文件上传中间件</td>
+</tr>
+<tr>
+<td>AI 服务</td>
+<td>通义千问 (DashScope)</td>
+<td>支持文本和视觉多模态，用于智能记账和旅行攻略生成</td>
+</tr>
+</tbody></table>
+<h2>3. 前端架构</h2>
+<h3>3.1 目录结构</h3>
+<pre><code>frontend/src/
+├── api/              # API 调用层（按领域划分）
+│   ├── auth.js       # 认证相关
+│   ├── user.js       # 用户信息
+│   ├── accountBook.js # 账本管理
+│   ├── transaction.js # 交易管理
+│   ├── participant.js # 参与人
+│   ├── splitBill.js  # 分账
+│   ├── exchangeRate.js # 汇率
+│   └── ai.js         # AI 记账 &amp; 旅行攻略
+├── components/       # 可复用组件
+│   ├── AIChatBill.jsx      # AI 对话记账
+│   ├── AITravelGuide.jsx   # AI 旅行攻略
+│   ├── AccountBookForm.jsx  # 账本表单
+│   ├── AccountBookSettings.jsx # 账本设置
+│   ├── ExchangeRateManager.jsx # 汇率管理
+│   ├── ParticipantManager.jsx  # 成员管理
+│   └── TransactionDetail.jsx   # 交易详情
+├── pages/            # 页面组件
+│   ├── Login.jsx
+│   ├── Register.jsx
+│   ├── AccountBookList.jsx
+│   ├── AccountBookDetail.jsx
+│   ├── TransactionForm.jsx
+│   ├── SplitBill.jsx
+│   └── Profile.jsx
+├── utils/
+│   └── request.js    # Axios 实例（拦截器）
+├── App.jsx           # 路由配置
+└── main.jsx          # 入口
+</code></pre>
+<h3>3.2 状态管理</h3>
+<ul>
+<li>使用 React 内置 useState/useEffect 管理组件状态</li>
+<li>无全局状态管理库（项目规模适中）</li>
+<li>Token 存储在 localStorage</li>
+</ul>
+<h3>3.3 请求层设计</h3>
+<pre><code class="language-javascript">// utils/request.js - Axios 拦截器
+// 请求拦截：自动附加 Authorization header
+// 响应拦截：统一错误处理，401 自动跳转登录
+</code></pre>
+<h3>3.4 路由设计</h3>
+<table>
+<thead>
+<tr>
+<th>路径</th>
+<th>页面</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>/login</code></td>
+<td>Login</td>
+<td>登录</td>
+</tr>
+<tr>
+<td><code>/register</code></td>
+<td>Register</td>
+<td>注册</td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>AccountBookList</td>
+<td>账本列表（首页）</td>
+</tr>
+<tr>
+<td><code>/account-books/:id</code></td>
+<td>AccountBookDetail</td>
+<td>账本详情</td>
+</tr>
+<tr>
+<td><code>/account-books/:id/add</code></td>
+<td>TransactionForm</td>
+<td>新增交易</td>
+</tr>
+<tr>
+<td><code>/account-books/:id/edit/:txId</code></td>
+<td>TransactionForm</td>
+<td>编辑交易</td>
+</tr>
+<tr>
+<td><code>/account-books/:id/split</code></td>
+<td>SplitBill</td>
+<td>分账</td>
+</tr>
+<tr>
+<td><code>/profile</code></td>
+<td>Profile</td>
+<td>个人中心</td>
+</tr>
+</tbody></table>
+<h2>4. 后端架构</h2>
+<h3>4.1 目录结构</h3>
+<pre><code>backend/src/
+├── controllers/      # 控制器（业务逻辑）
+├── middleware/       # 中间件
+│   └── auth.js       # JWT 认证中间件
+├── routes/
+│   └── index.js      # 路由注册中心
+├── config/
+│   └── database.js   # MySQL 连接池配置
+├── utils/
+│   └── response.js   # 统一响应工具
+└── app.js            # Express 应用入口
+</code></pre>
+<h3>4.2 控制器设计</h3>
+<p>采用类单例模式，每个控制器负责一个领域：</p>
+<pre><code class="language-javascript">class TransactionController {
+  async create(req, res) { /* ... */ }
+  async getList(req, res) { /* ... */ }
+  async getDetail(req, res) { /* ... */ }
+  async update(req, res) { /* ... */ }
+  async delete(req, res) { /* ... */ }
+}
+module.exports = new TransactionController();
+</code></pre>
+<h3>4.3 中间件链</h3>
+<pre><code>请求 → CORS → JSON解析 → 静态文件 → 路由匹配 → [JWT认证] → 控制器 → 响应
+</code></pre>
+<h3>4.4 统一响应格式</h3>
+<pre><code class="language-javascript">// 成功
+ResponseUtil.success(res, data, &#39;操作成功&#39;);
+// { code: 200, message: &#39;操作成功&#39;, data: {...} }
+
+// 失败
+ResponseUtil.error(res, &#39;错误信息&#39;, 400);
+// { code: 400, message: &#39;错误信息&#39;, data: null }
+</code></pre>
+<h2>5. 数据库设计</h2>
+<h3>5.1 ER 关系描述</h3>
+<pre><code>users (用户)
+  │
+  ├── 1:N ──→ account_books (账本)
+  │               │
+  │               ├── 1:N ──→ exchange_rates (汇率)
+  │               │
+  │               ├── 1:N ──→ participants (参与人)
+  │               │               │
+  │               │               └── M:N ──→ transactions (通过 transaction_participants)
+  │               │
+  │               └── 1:N ──→ transactions (交易)
+  │                               │
+  │                               └── N:1 ──→ participants (付款人)
+  │
+  ├── 1:N ──→ travel_guides (旅行攻略)
+  │               │
+  │               └── N:1 ──→ account_books (关联账本，可选)
+  │
+  └── 1:N ──→ verification_codes (验证码)
+</code></pre>
+<h3>5.2 核心表说明</h3>
+<table>
+<thead>
+<tr>
+<th>表名</th>
+<th>说明</th>
+<th>关键字段</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>users</td>
+<td>用户账号</td>
+<td>email, phone, password, nickname, default_currency</td>
+</tr>
+<tr>
+<td>account_books</td>
+<td>旅行账本</td>
+<td>user_id, name, destination, start_date, end_date, budget, is_archived</td>
+</tr>
+<tr>
+<td>exchange_rates</td>
+<td>汇率配置</td>
+<td>account_book_id, currency, rate</td>
+</tr>
+<tr>
+<td>participants</td>
+<td>参与人</td>
+<td>account_book_id, user_id, name, email, is_settled</td>
+</tr>
+<tr>
+<td>transactions</td>
+<td>交易记录</td>
+<td>account_book_id, amount, currency, local_amount, type, payer_id, created_by</td>
+</tr>
+<tr>
+<td>transaction_participants</td>
+<td>交易参与人关联</td>
+<td>transaction_id, participant_id</td>
+</tr>
+<tr>
+<td>travel_guides</td>
+<td>旅行攻略</td>
+<td>user_id, account_book_id, title, city, days, budget, travel_type, guide_data</td>
+</tr>
+<tr>
+<td>verification_codes</td>
+<td>验证码</td>
+<td>account, code, type, expires_at</td>
+</tr>
+</tbody></table>
+<h3>5.3 索引策略</h3>
+<ul>
+<li>主键自增索引</li>
+<li>外键索引（user_id, account_book_id 等）</li>
+<li>唯一索引（email, phone, book+currency 组合）</li>
+<li>时间索引（created_at, transaction_time）</li>
+</ul>
+<h2>6. API 设计原则</h2>
+<h3>6.1 RESTful 规范</h3>
+<ul>
+<li>资源用名词复数：<code>/account-books</code>, <code>/transactions</code></li>
+<li>HTTP 方法语义化：GET 查询、POST 创建、PUT 更新、DELETE 删除</li>
+<li>嵌套资源表达归属：<code>/account-books/:bookId/transactions</code></li>
+</ul>
+<h3>6.2 认证</h3>
+<ul>
+<li>公开接口：注册、登录、发送验证码、重置密码、邮箱直接重置密码</li>
+<li>受保护接口：其余所有接口需要 JWT Token</li>
+</ul>
+<h3>6.3 分页</h3>
+<pre><code>GET /account-books?page=1&amp;pageSize=10&amp;search=关键词
+</code></pre>
+<h3>6.4 错误处理</h3>
+<ul>
+<li>统一错误码（200/400/401/403/404/500）</li>
+<li>中文错误消息，前端可直接展示</li>
+</ul>
+<h2>7. 认证方案</h2>
+<h3>7.1 流程</h3>
+<pre><code>注册/登录 → 服务端生成 JWT → 返回 Token → 客户端存储 localStorage
+                                              ↓
+后续请求 → Authorization: Bearer &lt;token&gt; → 中间件验证 → 通过/拒绝
+</code></pre>
+<h3>7.2 Token 结构</h3>
+<pre><code class="language-javascript">{
+  userId: 1,        // 用户ID
+  iat: 1234567890,  // 签发时间
+  exp: 1234654290   // 过期时间
+}
+</code></pre>
+<h3>7.3 安全措施</h3>
+<ul>
+<li>密码使用 bcryptjs 加盐哈希（salt rounds: 10）</li>
+<li>Token 有效期可配置（默认 7 天）</li>
+<li>前端 401 响应自动清除 Token 并跳转登录</li>
+</ul>
+<h2>8. 文件上传方案</h2>
+<h3>8.1 配置</h3>
+<ul>
+<li>使用 Multer 中间件处理 multipart/form-data</li>
+<li>存储路径：<code>backend/uploads/</code></li>
+<li>文件大小限制：10MB</li>
+<li>允许格式：jpeg, jpg, png, gif, webp</li>
+</ul>
+<h3>8.2 文件命名</h3>
+<pre><code>{type}-{timestamp}-{random}.{ext}
+// 示例: avatar-1709123456789-123456789.jpg
+// 示例: cover-1709123456789-987654321.png
+</code></pre>
+<h3>8.3 访问方式</h3>
+<ul>
+<li>静态文件通过 Express 静态中间件提供</li>
+<li>访问 URL：<code>http://host:3000/uploads/filename.jpg</code></li>
+<li>数据库存储相对路径或完整 URL</li>
+</ul>
+<h3>8.4 使用场景</h3>
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>字段名</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用户头像</td>
+<td>avatar</td>
+<td>个人中心上传</td>
+</tr>
+<tr>
+<td>账本封面</td>
+<td>cover</td>
+<td>账本自定义封面</td>
+</tr>
+<tr>
+<td>AI 图片记账</td>
+<td>imageBase64</td>
+<td>Base64 传输，不落盘</td>
+</tr>
+</tbody></table>
+<h2>9. AI 旅行攻略方案</h2>
+<h3>9.1 功能架构</h3>
+<pre><code>用户输入（城市/天数/预算/类型）
+        │
+        ▼
+  POST /ai/generate-guide
+        │
+        ▼
+  通义千问 qwen-turbo
+  (结构化 JSON Prompt)
+        │
+        ▼
+  解析返回 JSON 攻略数据
+  (dailyPlans/foodList/hotelTips/warnings/budgetSummary)
+        │
+        ▼
+  前端展示 &amp; 保存到 travel_guides 表
+        │
+        ▼
+  可选：一键创建关联 account_books
+</code></pre>
+<h3>9.2 攻略数据结构</h3>
+<pre><code class="language-javascript">{
+  title: &quot;重庆3天2晚·逛吃+夜景&quot;,
+  summary: &quot;一句话概括&quot;,
+  dailyPlans: [{
+    day: 1,
+    theme: &quot;当日主题&quot;,
+    schedule: [{
+      time: &quot;上午&quot;,
+      activity: &quot;活动描述&quot;,
+      location: &quot;地点&quot;,
+      transport: &quot;交通方式&quot;,
+      cost: 100,
+      category: &quot;门票&quot;,
+      tips: &quot;小贴士&quot;
+    }],
+    dailyBudget: 500
+  }],
+  foodList: [{ name: &quot;店名&quot;, location: &quot;地点&quot;, avgPrice: 80, mustTry: &quot;必点菜&quot;, tips: &quot;备注&quot; }],
+  hotelTips: [{ area: &quot;推荐区域&quot;, priceRange: &quot;200-400&quot;, reason: &quot;推荐理由&quot; }],
+  warnings: [&quot;避坑提醒1&quot;, &quot;避坑提醒2&quot;],
+  budgetSummary: {
+    accommodation: 800,
+    food: 600,
+    transport: 300,
+    tickets: 200,
+    shopping: 300,
+    other: 100,
+    total: 2300
+  }
+}
+</code></pre>
+<h3>9.3 攻略修改</h3>
+<ul>
+<li>用户通过自然语言描述修改需求</li>
+<li>后端将当前攻略 JSON + 用户需求发送给 AI</li>
+<li>AI 返回修改后的完整 JSON，保持结构不变</li>
+<li>更新攻略时自动同步关联账本的名称、预算、日期等信息</li>
+</ul>
+<h3>9.4 攻略-账本联动</h3>
+<ul>
+<li>创建账本时关联 <code>travel_guides.account_book_id</code></li>
+<li>更新攻略时自动同步：账本名称、目的地、预算、日期范围</li>
+<li>删除攻略不影响已创建的账本</li>
+</ul>
+<h2>10. UI 主题设计</h2>
+<h3>10.1 配色方案</h3>
+<table>
+<thead>
+<tr>
+<th>用途</th>
+<th>色值</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>页面背景</td>
+<td>#E8F5C8 / #F2F8E0</td>
+<td>浅绿色，清新自然</td>
+</tr>
+<tr>
+<td>头部/卡片</td>
+<td>#1A1A2E</td>
+<td>深色，提供对比度</td>
+</tr>
+<tr>
+<td>强调色/按钮</td>
+<td>#C8E64E</td>
+<td>黄绿色，活力醒目</td>
+</tr>
+<tr>
+<td>文字主色</td>
+<td>#FFFFFF（深色背景上）</td>
+<td>白色文字</td>
+</tr>
+<tr>
+<td>文字辅色</td>
+<td>#333333（浅色背景上）</td>
+<td>深色文字</td>
+</tr>
+</tbody></table>
+<h3>10.2 登录页设计</h3>
+<ul>
+<li>自定义 SVG Logo</li>
+<li>胶囊形（pill）输入框</li>
+<li>底部弹窗式忘记密码</li>
+</ul>
+<h3>10.3 预算展示</h3>
+<ul>
+<li>预算按人均展示：总预算 ÷ 成员人数</li>
+<li>进度条显示当前用户实际消费占人均预算的比例</li>
+<li>超出预算时进度条变色提醒</li>
+</ul>
+<h2>11. 权限设计</h2>
+<h3>11.1 交易编辑权限</h3>
+<ul>
+<li>账本所有成员（通过 participants 表关联了 user_id 的用户）均可编辑和删除该账本下的交易</li>
+<li>不再限制为仅账本创建者或交易创建者可操作</li>
+<li>封存账本的只读限制优先级高于成员编辑权限</li>
+</ul>
+</div>
+<div class="doc-content" id="api"><h1>API 接口文档</h1>
+<h2>基础信息</h2>
+<ul>
+<li>Base URL: <code>http://localhost:3000/api</code></li>
+<li>认证方式: JWT Token (Header: <code>Authorization: Bearer &lt;token&gt;</code>)</li>
+<li>响应格式: JSON</li>
+</ul>
+<h2>通用响应格式</h2>
+<h3>成功响应</h3>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;message&quot;: &quot;success&quot;,
+  &quot;data&quot;: {}
+}
+</code></pre>
+<h3>错误响应</h3>
+<pre><code class="language-json">{
+  &quot;code&quot;: 400,
+  &quot;message&quot;: &quot;错误信息&quot;,
+  &quot;data&quot;: null
+}
+</code></pre>
+<h2>1. 用户认证模块</h2>
+<h3>1.1 注册</h3>
+<ul>
+<li><strong>POST</strong> <code>/auth/register</code></li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;email&quot;: &quot;user@example.com&quot;,
+  &quot;phone&quot;: &quot;13800138000&quot;,
+  &quot;password&quot;: &quot;password123&quot;,
+  &quot;nickname&quot;: &quot;用户昵称&quot;
+}
+</code></pre>
+<ul>
+<li><strong>Response</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;message&quot;: &quot;注册成功&quot;,
+  &quot;data&quot;: {
+    &quot;userId&quot;: 1,
+    &quot;token&quot;: &quot;jwt_token_string&quot;
+  }
+}
+</code></pre>
+<h3>1.2 登录</h3>
+<ul>
+<li><strong>POST</strong> <code>/auth/login</code></li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;account&quot;: &quot;user@example.com&quot;,
+  &quot;password&quot;: &quot;password123&quot;
+}
+</code></pre>
+<ul>
+<li><strong>Response</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;message&quot;: &quot;登录成功&quot;,
+  &quot;data&quot;: {
+    &quot;userId&quot;: 1,
+    &quot;nickname&quot;: &quot;用户昵称&quot;,
+    &quot;avatar&quot;: &quot;avatar_url&quot;,
+    &quot;token&quot;: &quot;jwt_token_string&quot;
+  }
+}
+</code></pre>
+<h3>1.3 发送验证码</h3>
+<ul>
+<li><strong>POST</strong> <code>/auth/send-code</code></li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;account&quot;: &quot;user@example.com&quot;,
+  &quot;type&quot;: &quot;email&quot;
+}
+</code></pre>
+<h3>1.4 重置密码</h3>
+<ul>
+<li><strong>POST</strong> <code>/auth/reset-password</code></li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;account&quot;: &quot;user@example.com&quot;,
+  &quot;code&quot;: &quot;123456&quot;,
+  &quot;newPassword&quot;: &quot;newpassword123&quot;
+}
+</code></pre>
+<h3>1.5 邮箱直接重置密码</h3>
+<ul>
+<li><strong>POST</strong> <code>/auth/reset-password-direct</code></li>
+<li><strong>说明</strong>: 通过邮箱直接重置密码，无需验证码</li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;email&quot;: &quot;user@example.com&quot;,
+  &quot;newPassword&quot;: &quot;newpassword123&quot;
+}
+</code></pre>
+<ul>
+<li><strong>Response</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;message&quot;: &quot;密码重置成功&quot;,
+  &quot;data&quot;: null
+}
+</code></pre>
+<ul>
+<li><strong>错误场景</strong>:<ul>
+<li>邮箱未注册：400</li>
+<li>密码长度不足6位：400</li>
+</ul>
+</li>
+</ul>
+<h2>2. 用户信息模块</h2>
+<h3>2.1 获取个人信息</h3>
+<ul>
+<li><strong>GET</strong> <code>/user/profile</code></li>
+<li><strong>Response</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;data&quot;: {
+    &quot;userId&quot;: 1,
+    &quot;nickname&quot;: &quot;用户昵称&quot;,
+    &quot;avatar&quot;: &quot;avatar_url&quot;,
+    &quot;email&quot;: &quot;user@example.com&quot;,
+    &quot;phone&quot;: &quot;13800138000&quot;,
+    &quot;defaultCurrency&quot;: &quot;CNY&quot;,
+    &quot;createdAt&quot;: &quot;2026-01-01T00:00:00.000Z&quot;,
+    &quot;accountBookCount&quot;: 5
+  }
+}
+</code></pre>
+<h3>2.2 更新个人信息</h3>
+<ul>
+<li><strong>PUT</strong> <code>/user/profile</code></li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;nickname&quot;: &quot;新昵称&quot;,
+  &quot;defaultCurrency&quot;: &quot;USD&quot;
+}
+</code></pre>
+<h3>2.3 上传头像</h3>
+<ul>
+<li><strong>POST</strong> <code>/user/avatar</code></li>
+<li><strong>Content-Type</strong>: <code>multipart/form-data</code></li>
+<li><strong>Body</strong>: <code>avatar</code> (file)</li>
+<li><strong>Response</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;data&quot;: {
+    &quot;avatarUrl&quot;: &quot;http://localhost:3000/uploads/avatar_xxx.jpg&quot;
+  }
+}
+</code></pre>
+<h2>3. 账本管理模块</h2>
+<h3>3.1 创建账本</h3>
+<ul>
+<li><strong>POST</strong> <code>/account-books</code></li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;日本旅行&quot;,
+  &quot;destination&quot;: &quot;东京&quot;,
+  &quot;startDate&quot;: &quot;2026-03-01&quot;,
+  &quot;endDate&quot;: &quot;2026-03-07&quot;,
+  &quot;remark&quot;: &quot;春季赏樱之旅&quot;
+}
+</code></pre>
+<h3>3.2 获取账本列表</h3>
+<ul>
+<li><strong>GET</strong> <code>/account-books?search=日本&amp;page=1&amp;pageSize=10</code></li>
+<li><strong>Response</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;data&quot;: {
+    &quot;list&quot;: [
+      {
+        &quot;id&quot;: 1,
+        &quot;name&quot;: &quot;日本旅行&quot;,
+        &quot;destination&quot;: &quot;东京&quot;,
+        &quot;startDate&quot;: &quot;2026-03-01&quot;,
+        &quot;endDate&quot;: &quot;2026-03-07&quot;,
+        &quot;remark&quot;: &quot;春季赏樱之旅&quot;,
+        &quot;isArchived&quot;: false,
+        &quot;totalExpense&quot;: 15000.00,
+        &quot;createdAt&quot;: &quot;2026-02-01T00:00:00.000Z&quot;
+      }
+    ],
+    &quot;total&quot;: 1,
+    &quot;page&quot;: 1,
+    &quot;pageSize&quot;: 10
+  }
+}
+</code></pre>
+<h3>3.3 获取账本详情</h3>
+<ul>
+<li><strong>GET</strong> <code>/account-books/:id</code></li>
+<li><strong>Response</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;data&quot;: {
+    &quot;id&quot;: 1,
+    &quot;name&quot;: &quot;日本旅行&quot;,
+    &quot;destination&quot;: &quot;东京&quot;,
+    &quot;startDate&quot;: &quot;2026-03-01&quot;,
+    &quot;endDate&quot;: &quot;2026-03-07&quot;,
+    &quot;remark&quot;: &quot;春季赏樱之旅&quot;,
+    &quot;isArchived&quot;: false,
+    &quot;totalExpense&quot;: 15000.00,
+    &quot;personalExpense&quot;: 8000.00,
+    &quot;sharedExpense&quot;: 7000.00,
+    &quot;currencyBreakdown&quot;: [
+      { &quot;currency&quot;: &quot;JPY&quot;, &quot;amount&quot;: 150000 },
+      { &quot;currency&quot;: &quot;CNY&quot;, &quot;amount&quot;: 5000 }
+    ],
+    &quot;createdAt&quot;: &quot;2026-02-01T00:00:00.000Z&quot;
+  }
+}
+</code></pre>
+<h3>3.4 更新账本</h3>
+<ul>
+<li><strong>PUT</strong> <code>/account-books/:id</code></li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;日本东京旅行&quot;,
+  &quot;destination&quot;: &quot;东京、大阪&quot;,
+  &quot;startDate&quot;: &quot;2026-03-01&quot;,
+  &quot;endDate&quot;: &quot;2026-03-10&quot;,
+  &quot;remark&quot;: &quot;更新后的备注&quot;
+}
+</code></pre>
+<h3>3.5 删除账本</h3>
+<ul>
+<li><strong>DELETE</strong> <code>/account-books/:id</code></li>
+</ul>
+<h3>3.6 封存/解封账本</h3>
+<ul>
+<li><strong>PUT</strong> <code>/account-books/:id/archive</code></li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;isArchived&quot;: true
+}
+</code></pre>
+<h2>4. 汇率管理模块</h2>
+<h3>4.1 获取账本汇率列表</h3>
+<ul>
+<li><strong>GET</strong> <code>/account-books/:bookId/exchange-rates</code></li>
+<li><strong>Response</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;data&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;currency&quot;: &quot;JPY&quot;,
+      &quot;rate&quot;: 0.052,
+      &quot;updatedAt&quot;: &quot;2026-03-01T00:00:00.000Z&quot;
+    }
+  ]
+}
+</code></pre>
+<h3>4.2 设置/更新汇率</h3>
+<ul>
+<li><strong>POST</strong> <code>/account-books/:bookId/exchange-rates</code></li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;currency&quot;: &quot;JPY&quot;,
+  &quot;rate&quot;: 0.052
+}
+</code></pre>
+<h2>5. 账单管理模块</h2>
+<h3>5.1 创建账单</h3>
+<ul>
+<li><strong>POST</strong> <code>/account-books/:bookId/transactions</code></li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;amount&quot;: 5000,
+  &quot;currency&quot;: &quot;JPY&quot;,
+  &quot;category&quot;: &quot;餐饮&quot;,
+  &quot;transactionTime&quot;: &quot;2026-03-02T12:00:00.000Z&quot;,
+  &quot;location&quot;: &quot;新宿&quot;,
+  &quot;remark&quot;: &quot;午餐&quot;,
+  &quot;type&quot;: &quot;shared&quot;,
+  &quot;payerId&quot;: 1,
+  &quot;participantIds&quot;: [1, 2, 3]
+}
+</code></pre>
+<h3>5.2 获取账单列表</h3>
+<ul>
+<li><strong>GET</strong> <code>/account-books/:bookId/transactions?type=shared&amp;page=1&amp;pageSize=20</code></li>
+<li><strong>Response</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;data&quot;: {
+    &quot;list&quot;: [
+      {
+        &quot;id&quot;: 1,
+        &quot;amount&quot;: 5000,
+        &quot;currency&quot;: &quot;JPY&quot;,
+        &quot;localAmount&quot;: 260.00,
+        &quot;category&quot;: &quot;餐饮&quot;,
+        &quot;transactionTime&quot;: &quot;2026-03-02T12:00:00.000Z&quot;,
+        &quot;location&quot;: &quot;新宿&quot;,
+        &quot;remark&quot;: &quot;午餐&quot;,
+        &quot;type&quot;: &quot;shared&quot;,
+        &quot;payerName&quot;: &quot;张三&quot;,
+        &quot;participants&quot;: [&quot;张三&quot;, &quot;李四&quot;, &quot;王五&quot;],
+        &quot;createdAt&quot;: &quot;2026-03-02T12:05:00.000Z&quot;
+      }
+    ],
+    &quot;total&quot;: 1
+  }
+}
+</code></pre>
+<h3>5.3 更新账单</h3>
+<ul>
+<li><strong>PUT</strong> <code>/transactions/:id</code></li>
+<li><strong>Body</strong>: 同创建账单</li>
+</ul>
+<h3>5.4 删除账单</h3>
+<ul>
+<li><strong>DELETE</strong> <code>/transactions/:id</code></li>
+</ul>
+<h2>6. 参与人管理模块</h2>
+<h3>6.1 添加参与人</h3>
+<ul>
+<li><strong>POST</strong> <code>/account-books/:bookId/participants</code></li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;张三&quot;,
+  &quot;remark&quot;: &quot;朋友&quot;
+}
+</code></pre>
+<h3>6.2 获取参与人列表</h3>
+<ul>
+<li><strong>GET</strong> <code>/account-books/:bookId/participants</code></li>
+<li><strong>Response</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;data&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;name&quot;: &quot;张三&quot;,
+      &quot;remark&quot;: &quot;朋友&quot;,
+      &quot;createdAt&quot;: &quot;2026-02-01T00:00:00.000Z&quot;
+    }
+  ]
+}
+</code></pre>
+<h3>6.3 更新参与人</h3>
+<ul>
+<li><strong>PUT</strong> <code>/participants/:id</code></li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;name&quot;: &quot;张三&quot;,
+  &quot;remark&quot;: &quot;好友&quot;
+}
+</code></pre>
+<h3>6.4 删除参与人</h3>
+<ul>
+<li><strong>DELETE</strong> <code>/participants/:id</code></li>
+</ul>
+<h2>7. 分账管理模块</h2>
+<h3>7.1 计算分账</h3>
+<ul>
+<li><strong>GET</strong> <code>/account-books/:bookId/split-bills/calculate</code></li>
+<li><strong>Response</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;data&quot;: {
+    &quot;participants&quot;: [
+      {
+        &quot;participantId&quot;: 1,
+        &quot;participantName&quot;: &quot;张三&quot;,
+        &quot;shouldPay&quot;: 2333.33,
+        &quot;actualPaid&quot;: 5000.00,
+        &quot;balance&quot;: 2666.67
+      }
+    ],
+    &quot;totalSharedExpense&quot;: 7000.00
+  }
+}
+</code></pre>
+<h3>7.2 获取个人分账视图</h3>
+<ul>
+<li><strong>GET</strong> <code>/account-books/:bookId/split-bills/personal</code></li>
+<li><strong>Response</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;data&quot;: {
+    &quot;shouldPay&quot;: 2333.33,
+    &quot;actualPaid&quot;: 5000.00,
+    &quot;balance&quot;: 2666.67,
+    &quot;relatedTransactions&quot;: [
+      {
+        &quot;id&quot;: 1,
+        &quot;amount&quot;: 5000,
+        &quot;category&quot;: &quot;餐饮&quot;,
+        &quot;transactionTime&quot;: &quot;2026-03-02T12:00:00.000Z&quot;
+      }
+    ]
+  }
+}
+</code></pre>
+<h2>8. AI 模块</h2>
+<h3>8.1 AI 智能记账（文字/图片解析）</h3>
+<ul>
+<li><strong>POST</strong> <code>/account-books/:bookId/ai/parse</code></li>
+<li><strong>认证</strong>: 需要 JWT Token</li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;text&quot;: &quot;午餐花了80&quot;,
+  &quot;imageBase64&quot;: &quot;base64_encoded_image（可选）&quot;
+}
+</code></pre>
+<ul>
+<li><strong>Response</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;data&quot;: {
+    &quot;amount&quot;: 80,
+    &quot;currency&quot;: &quot;CNY&quot;,
+    &quot;category&quot;: &quot;餐饮&quot;,
+    &quot;subCategory&quot;: &quot;午餐&quot;,
+    &quot;remark&quot;: &quot;午餐&quot;,
+    &quot;location&quot;: &quot;&quot;,
+    &quot;type&quot;: &quot;personal&quot;,
+    &quot;payerId&quot;: null,
+    &quot;participantIds&quot;: [],
+    &quot;payerName&quot;: &quot;&quot;,
+    &quot;participantNames&quot;: [],
+    &quot;aiRawText&quot;: &quot;AI原始返回文本&quot;
+  }
+}
+</code></pre>
+<ul>
+<li><strong>说明</strong>: 文字模式使用 qwen-turbo，图片模式使用 qwen-vl-plus</li>
+</ul>
+<h3>8.2 生成旅行攻略</h3>
+<ul>
+<li><strong>POST</strong> <code>/ai/generate-guide</code></li>
+<li><strong>认证</strong>: 需要 JWT Token</li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;city&quot;: &quot;重庆&quot;,
+  &quot;days&quot;: 3,
+  &quot;budget&quot;: 3000,
+  &quot;travelType&quot;: &quot;美食游&quot;,
+  &quot;people&quot;: &quot;2人&quot;
+}
+</code></pre>
+<ul>
+<li><strong>Response</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;data&quot;: {
+    &quot;title&quot;: &quot;重庆3天2晚·逛吃+夜景&quot;,
+    &quot;summary&quot;: &quot;一句话概括&quot;,
+    &quot;dailyPlans&quot;: [
+      {
+        &quot;day&quot;: 1,
+        &quot;theme&quot;: &quot;当日主题&quot;,
+        &quot;schedule&quot;: [
+          {
+            &quot;time&quot;: &quot;上午&quot;,
+            &quot;activity&quot;: &quot;活动描述&quot;,
+            &quot;location&quot;: &quot;地点&quot;,
+            &quot;transport&quot;: &quot;交通方式&quot;,
+            &quot;cost&quot;: 100,
+            &quot;category&quot;: &quot;门票&quot;,
+            &quot;tips&quot;: &quot;小贴士&quot;
+          }
+        ],
+        &quot;dailyBudget&quot;: 500
+      }
+    ],
+    &quot;foodList&quot;: [
+      { &quot;name&quot;: &quot;店名&quot;, &quot;location&quot;: &quot;地点&quot;, &quot;avgPrice&quot;: 80, &quot;mustTry&quot;: &quot;必点菜&quot;, &quot;tips&quot;: &quot;备注&quot; }
+    ],
+    &quot;hotelTips&quot;: [
+      { &quot;area&quot;: &quot;推荐区域&quot;, &quot;priceRange&quot;: &quot;200-400&quot;, &quot;reason&quot;: &quot;推荐理由&quot; }
+    ],
+    &quot;warnings&quot;: [&quot;避坑提醒1&quot;, &quot;避坑提醒2&quot;],
+    &quot;budgetSummary&quot;: {
+      &quot;accommodation&quot;: 800,
+      &quot;food&quot;: 600,
+      &quot;transport&quot;: 300,
+      &quot;tickets&quot;: 200,
+      &quot;shopping&quot;: 300,
+      &quot;other&quot;: 100,
+      &quot;total&quot;: 2300
+    }
+  }
+}
+</code></pre>
+<h3>8.3 AI 修改攻略</h3>
+<ul>
+<li><strong>POST</strong> <code>/ai/modify-guide</code></li>
+<li><strong>认证</strong>: 需要 JWT Token</li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;currentGuide&quot;: { &quot;...当前攻略JSON...&quot; },
+  &quot;userRequest&quot;: &quot;把第二天改成逛博物馆&quot;
+}
+</code></pre>
+<ul>
+<li><strong>Response</strong>: 同生成攻略，返回修改后的完整攻略 JSON</li>
+</ul>
+<h3>8.4 保存攻略</h3>
+<ul>
+<li><strong>POST</strong> <code>/ai/guides</code></li>
+<li><strong>认证</strong>: 需要 JWT Token</li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;title&quot;: &quot;重庆3天2晚·逛吃+夜景&quot;,
+  &quot;city&quot;: &quot;重庆&quot;,
+  &quot;days&quot;: 3,
+  &quot;budget&quot;: 3000,
+  &quot;travelType&quot;: &quot;美食游&quot;,
+  &quot;guideData&quot;: { &quot;...攻略JSON...&quot; },
+  &quot;accountBookId&quot;: 1
+}
+</code></pre>
+<ul>
+<li><strong>Response</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;message&quot;: &quot;保存成功&quot;,
+  &quot;data&quot;: { &quot;id&quot;: 1 }
+}
+</code></pre>
+<h3>8.5 获取攻略列表</h3>
+<ul>
+<li><strong>GET</strong> <code>/ai/guides</code></li>
+<li><strong>认证</strong>: 需要 JWT Token</li>
+<li><strong>Response</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;data&quot;: [
+    {
+      &quot;id&quot;: 1,
+      &quot;title&quot;: &quot;重庆3天2晚·逛吃+夜景&quot;,
+      &quot;city&quot;: &quot;重庆&quot;,
+      &quot;days&quot;: 3,
+      &quot;budget&quot;: 3000,
+      &quot;travel_type&quot;: &quot;美食游&quot;,
+      &quot;account_book_id&quot;: 1,
+      &quot;created_at&quot;: &quot;2026-03-01T00:00:00.000Z&quot;,
+      &quot;updated_at&quot;: &quot;2026-03-01T00:00:00.000Z&quot;
+    }
+  ]
+}
+</code></pre>
+<h3>8.6 获取攻略详情</h3>
+<ul>
+<li><strong>GET</strong> <code>/ai/guides/:id</code></li>
+<li><strong>认证</strong>: 需要 JWT Token</li>
+<li><strong>Response</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;code&quot;: 200,
+  &quot;data&quot;: {
+    &quot;id&quot;: 1,
+    &quot;user_id&quot;: 1,
+    &quot;account_book_id&quot;: 1,
+    &quot;title&quot;: &quot;重庆3天2晚·逛吃+夜景&quot;,
+    &quot;city&quot;: &quot;重庆&quot;,
+    &quot;days&quot;: 3,
+    &quot;budget&quot;: 3000,
+    &quot;travel_type&quot;: &quot;美食游&quot;,
+    &quot;guide_data&quot;: { &quot;...完整攻略JSON...&quot; },
+    &quot;created_at&quot;: &quot;2026-03-01T00:00:00.000Z&quot;,
+    &quot;updated_at&quot;: &quot;2026-03-01T00:00:00.000Z&quot;
+  }
+}
+</code></pre>
+<h3>8.7 更新攻略</h3>
+<ul>
+<li><strong>PUT</strong> <code>/ai/guides/:id</code></li>
+<li><strong>认证</strong>: 需要 JWT Token</li>
+<li><strong>说明</strong>: 更新攻略内容，如有关联账本会自动同步账本的名称、人均预算、日期等信息</li>
+<li><strong>Body</strong>:</li>
+</ul>
+<pre><code class="language-json">{
+  &quot;title&quot;: &quot;新标题&quot;,
+  &quot;guideData&quot;: { &quot;...更新后的攻略JSON...&quot; },
+  &quot;accountBookId&quot;: 1
+}
+</code></pre>
+<h3>8.8 删除攻略</h3>
+<ul>
+<li><strong>DELETE</strong> <code>/ai/guides/:id</code></li>
+<li><strong>认证</strong>: 需要 JWT Token</li>
+</ul>
+<h2>错误码说明</h2>
+<ul>
+<li>200: 成功</li>
+<li>400: 请求参数错误</li>
+<li>401: 未授权（未登录或 token 失效）</li>
+<li>403: 禁止访问（权限不足）</li>
+<li>404: 资源不存在</li>
+<li>500: 服务器内部错误</li>
+</ul>
+</div>
+<div class="doc-content" id="database"><h1>数据库设计文档</h1>
+<h2>数据库概述</h2>
+<ul>
+<li>数据库名称: <code>travel_accounting</code></li>
+<li>字符集: <code>utf8mb4</code></li>
+<li>排序规则: <code>utf8mb4_unicode_ci</code></li>
+</ul>
+<h2>数据表设计</h2>
+<h3>1. 用户表 (users)</h3>
+<p>存储用户基本信息</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>约束</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>INT</td>
+<td>PK, AUTO_INCREMENT</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>email</td>
+<td>VARCHAR(100)</td>
+<td>UNIQUE</td>
+<td>邮箱</td>
+</tr>
+<tr>
+<td>phone</td>
+<td>VARCHAR(20)</td>
+<td>UNIQUE</td>
+<td>手机号</td>
+</tr>
+<tr>
+<td>password</td>
+<td>VARCHAR(255)</td>
+<td>NOT NULL</td>
+<td>密码（加密）</td>
+</tr>
+<tr>
+<td>nickname</td>
+<td>VARCHAR(50)</td>
+<td>NOT NULL</td>
+<td>昵称</td>
+</tr>
+<tr>
+<td>avatar</td>
+<td>VARCHAR(255)</td>
+<td>NULL</td>
+<td>头像URL</td>
+</tr>
+<tr>
+<td>default_currency</td>
+<td>VARCHAR(10)</td>
+<td>DEFAULT &#39;CNY&#39;</td>
+<td>默认本币</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMP</td>
+<td>DEFAULT CURRENT_TIMESTAMP</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>TIMESTAMP</td>
+<td>DEFAULT CURRENT_TIMESTAMP ON UPDATE</td>
+<td>更新时间</td>
+</tr>
+</tbody></table>
+<p><strong>索引</strong>:</p>
+<ul>
+<li>PRIMARY KEY (id)</li>
+<li>UNIQUE KEY (email)</li>
+<li>UNIQUE KEY (phone)</li>
+</ul>
+<hr>
+<h3>2. 账本表 (account_books)</h3>
+<p>存储旅行账本信息</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>约束</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>INT</td>
+<td>PK, AUTO_INCREMENT</td>
+<td>账本ID</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>INT</td>
+<td>NOT NULL, FK</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>name</td>
+<td>VARCHAR(100)</td>
+<td>NOT NULL</td>
+<td>旅行名称</td>
+</tr>
+<tr>
+<td>destination</td>
+<td>VARCHAR(100)</td>
+<td>NOT NULL</td>
+<td>目的地</td>
+</tr>
+<tr>
+<td>start_date</td>
+<td>DATE</td>
+<td>NOT NULL</td>
+<td>开始日期</td>
+</tr>
+<tr>
+<td>end_date</td>
+<td>DATE</td>
+<td>NOT NULL</td>
+<td>结束日期</td>
+</tr>
+<tr>
+<td>remark</td>
+<td>TEXT</td>
+<td>NULL</td>
+<td>备注</td>
+</tr>
+<tr>
+<td>budget</td>
+<td>DECIMAL(12,2)</td>
+<td>NULL</td>
+<td>预算金额</td>
+</tr>
+<tr>
+<td>is_archived</td>
+<td>BOOLEAN</td>
+<td>DEFAULT FALSE</td>
+<td>是否封存</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMP</td>
+<td>DEFAULT CURRENT_TIMESTAMP</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>TIMESTAMP</td>
+<td>DEFAULT CURRENT_TIMESTAMP ON UPDATE</td>
+<td>更新时间</td>
+</tr>
+</tbody></table>
+<p><strong>索引</strong>:</p>
+<ul>
+<li>PRIMARY KEY (id)</li>
+<li>INDEX idx_user_id (user_id)</li>
+<li>INDEX idx_created_at (created_at)</li>
+<li>FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE</li>
+</ul>
+<hr>
+<h3>3. 汇率表 (exchange_rates)</h3>
+<p>存储账本的汇率设置</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>约束</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>INT</td>
+<td>PK, AUTO_INCREMENT</td>
+<td>汇率ID</td>
+</tr>
+<tr>
+<td>account_book_id</td>
+<td>INT</td>
+<td>NOT NULL, FK</td>
+<td>账本ID</td>
+</tr>
+<tr>
+<td>currency</td>
+<td>VARCHAR(10)</td>
+<td>NOT NULL</td>
+<td>币种代码</td>
+</tr>
+<tr>
+<td>rate</td>
+<td>DECIMAL(10,6)</td>
+<td>NOT NULL</td>
+<td>汇率（1外币=多少本币）</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMP</td>
+<td>DEFAULT CURRENT_TIMESTAMP</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>TIMESTAMP</td>
+<td>DEFAULT CURRENT_TIMESTAMP ON UPDATE</td>
+<td>更新时间</td>
+</tr>
+</tbody></table>
+<p><strong>索引</strong>:</p>
+<ul>
+<li>PRIMARY KEY (id)</li>
+<li>UNIQUE KEY uk_book_currency (account_book_id, currency)</li>
+<li>FOREIGN KEY (account_book_id) REFERENCES account_books(id) ON DELETE CASCADE</li>
+</ul>
+<hr>
+<h3>4. 参与人表 (participants)</h3>
+<p>存储账本的分账参与人</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>约束</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>INT</td>
+<td>PK, AUTO_INCREMENT</td>
+<td>参与人ID</td>
+</tr>
+<tr>
+<td>account_book_id</td>
+<td>INT</td>
+<td>NOT NULL, FK</td>
+<td>账本ID</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>INT</td>
+<td>NULL, FK</td>
+<td>关联用户ID</td>
+</tr>
+<tr>
+<td>name</td>
+<td>VARCHAR(50)</td>
+<td>NOT NULL</td>
+<td>姓名</td>
+</tr>
+<tr>
+<td>email</td>
+<td>VARCHAR(100)</td>
+<td>NULL</td>
+<td>邮箱</td>
+</tr>
+<tr>
+<td>remark</td>
+<td>VARCHAR(100)</td>
+<td>NULL</td>
+<td>备注</td>
+</tr>
+<tr>
+<td>is_settled</td>
+<td>BOOLEAN</td>
+<td>DEFAULT FALSE</td>
+<td>是否已结清</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMP</td>
+<td>DEFAULT CURRENT_TIMESTAMP</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>TIMESTAMP</td>
+<td>DEFAULT CURRENT_TIMESTAMP ON UPDATE</td>
+<td>更新时间</td>
+</tr>
+</tbody></table>
+<p><strong>索引</strong>:</p>
+<ul>
+<li>PRIMARY KEY (id)</li>
+<li>INDEX idx_account_book_id (account_book_id)</li>
+<li>INDEX idx_user_id (user_id)</li>
+<li>FOREIGN KEY (account_book_id) REFERENCES account_books(id) ON DELETE CASCADE</li>
+</ul>
+<hr>
+<h3>5. 账单表 (transactions)</h3>
+<p>存储消费账单记录</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>约束</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>INT</td>
+<td>PK, AUTO_INCREMENT</td>
+<td>账单ID</td>
+</tr>
+<tr>
+<td>account_book_id</td>
+<td>INT</td>
+<td>NOT NULL, FK</td>
+<td>账本ID</td>
+</tr>
+<tr>
+<td>amount</td>
+<td>DECIMAL(12,2)</td>
+<td>NOT NULL</td>
+<td>原币金额</td>
+</tr>
+<tr>
+<td>currency</td>
+<td>VARCHAR(10)</td>
+<td>NOT NULL</td>
+<td>币种</td>
+</tr>
+<tr>
+<td>local_amount</td>
+<td>DECIMAL(12,2)</td>
+<td>NOT NULL</td>
+<td>本币金额</td>
+</tr>
+<tr>
+<td>category</td>
+<td>VARCHAR(20)</td>
+<td>NOT NULL</td>
+<td>消费分类</td>
+</tr>
+<tr>
+<td>transaction_time</td>
+<td>TIMESTAMP</td>
+<td>NOT NULL</td>
+<td>消费时间</td>
+</tr>
+<tr>
+<td>location</td>
+<td>VARCHAR(100)</td>
+<td>NULL</td>
+<td>消费地点</td>
+</tr>
+<tr>
+<td>remark</td>
+<td>TEXT</td>
+<td>NULL</td>
+<td>备注</td>
+</tr>
+<tr>
+<td>type</td>
+<td>ENUM(&#39;personal&#39;,&#39;shared&#39;)</td>
+<td>NOT NULL</td>
+<td>账单类型</td>
+</tr>
+<tr>
+<td>payer_id</td>
+<td>INT</td>
+<td>NULL, FK</td>
+<td>付款人ID</td>
+</tr>
+<tr>
+<td>created_by</td>
+<td>INT</td>
+<td>NULL</td>
+<td>创建者用户ID</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMP</td>
+<td>DEFAULT CURRENT_TIMESTAMP</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>TIMESTAMP</td>
+<td>DEFAULT CURRENT_TIMESTAMP ON UPDATE</td>
+<td>更新时间</td>
+</tr>
+</tbody></table>
+<p><strong>索引</strong>:</p>
+<ul>
+<li>PRIMARY KEY (id)</li>
+<li>INDEX idx_account_book_id (account_book_id)</li>
+<li>INDEX idx_transaction_time (transaction_time)</li>
+<li>INDEX idx_type (type)</li>
+<li>FOREIGN KEY (account_book_id) REFERENCES account_books(id) ON DELETE CASCADE</li>
+<li>FOREIGN KEY (payer_id) REFERENCES participants(id) ON DELETE SET NULL</li>
+</ul>
+<hr>
+<h3>6. 账单参与人关联表 (transaction_participants)</h3>
+<p>存储共同账单的参与人关系</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>约束</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>INT</td>
+<td>PK, AUTO_INCREMENT</td>
+<td>关联ID</td>
+</tr>
+<tr>
+<td>transaction_id</td>
+<td>INT</td>
+<td>NOT NULL, FK</td>
+<td>账单ID</td>
+</tr>
+<tr>
+<td>participant_id</td>
+<td>INT</td>
+<td>NOT NULL, FK</td>
+<td>参与人ID</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMP</td>
+<td>DEFAULT CURRENT_TIMESTAMP</td>
+<td>创建时间</td>
+</tr>
+</tbody></table>
+<p><strong>索引</strong>:</p>
+<ul>
+<li>PRIMARY KEY (id)</li>
+<li>UNIQUE KEY uk_transaction_participant (transaction_id, participant_id)</li>
+<li>INDEX idx_participant_id (participant_id)</li>
+<li>FOREIGN KEY (transaction_id) REFERENCES transactions(id) ON DELETE CASCADE</li>
+<li>FOREIGN KEY (participant_id) REFERENCES participants(id) ON DELETE CASCADE</li>
+</ul>
+<hr>
+<h3>7. 验证码表 (verification_codes)</h3>
+<p>存储验证码信息</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>约束</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>INT</td>
+<td>PK, AUTO_INCREMENT</td>
+<td>验证码ID</td>
+</tr>
+<tr>
+<td>account</td>
+<td>VARCHAR(100)</td>
+<td>NOT NULL</td>
+<td>账号（邮箱/手机）</td>
+</tr>
+<tr>
+<td>code</td>
+<td>VARCHAR(10)</td>
+<td>NOT NULL</td>
+<td>验证码</td>
+</tr>
+<tr>
+<td>type</td>
+<td>ENUM(&#39;email&#39;,&#39;phone&#39;)</td>
+<td>NOT NULL</td>
+<td>类型</td>
+</tr>
+<tr>
+<td>expires_at</td>
+<td>TIMESTAMP</td>
+<td>NOT NULL</td>
+<td>过期时间</td>
+</tr>
+<tr>
+<td>is_used</td>
+<td>BOOLEAN</td>
+<td>DEFAULT FALSE</td>
+<td>是否已使用</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMP</td>
+<td>DEFAULT CURRENT_TIMESTAMP</td>
+<td>创建时间</td>
+</tr>
+</tbody></table>
+<p><strong>索引</strong>:</p>
+<ul>
+<li>PRIMARY KEY (id)</li>
+<li>INDEX idx_account_code (account, code)</li>
+<li>INDEX idx_expires_at (expires_at)</li>
+</ul>
+<hr>
+<h3>8. 旅行攻略表 (travel_guides)</h3>
+<p>存储 AI 生成的旅行攻略</p>
+<table>
+<thead>
+<tr>
+<th>字段名</th>
+<th>类型</th>
+<th>约束</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>id</td>
+<td>INT</td>
+<td>PK, AUTO_INCREMENT</td>
+<td>攻略ID</td>
+</tr>
+<tr>
+<td>user_id</td>
+<td>INT</td>
+<td>NOT NULL</td>
+<td>用户ID</td>
+</tr>
+<tr>
+<td>account_book_id</td>
+<td>INT</td>
+<td>NULL</td>
+<td>关联账本ID</td>
+</tr>
+<tr>
+<td>title</td>
+<td>VARCHAR(200)</td>
+<td>NOT NULL</td>
+<td>攻略标题</td>
+</tr>
+<tr>
+<td>city</td>
+<td>VARCHAR(100)</td>
+<td>NOT NULL</td>
+<td>目的地城市</td>
+</tr>
+<tr>
+<td>days</td>
+<td>INT</td>
+<td>NOT NULL, DEFAULT 3</td>
+<td>旅行天数</td>
+</tr>
+<tr>
+<td>budget</td>
+<td>INT</td>
+<td>NULL</td>
+<td>预算金额</td>
+</tr>
+<tr>
+<td>travel_type</td>
+<td>VARCHAR(50)</td>
+<td>NULL</td>
+<td>出行类型</td>
+</tr>
+<tr>
+<td>guide_data</td>
+<td>JSON</td>
+<td>NOT NULL</td>
+<td>攻略详细数据（JSON）</td>
+</tr>
+<tr>
+<td>created_at</td>
+<td>TIMESTAMP</td>
+<td>DEFAULT CURRENT_TIMESTAMP</td>
+<td>创建时间</td>
+</tr>
+<tr>
+<td>updated_at</td>
+<td>TIMESTAMP</td>
+<td>DEFAULT CURRENT_TIMESTAMP ON UPDATE</td>
+<td>更新时间</td>
+</tr>
+</tbody></table>
+<p><strong>索引</strong>:</p>
+<ul>
+<li>PRIMARY KEY (id)</li>
+</ul>
+<p><strong>guide_data JSON 结构</strong>:</p>
+<pre><code class="language-json">{
+  &quot;title&quot;: &quot;攻略标题&quot;,
+  &quot;summary&quot;: &quot;概要&quot;,
+  &quot;dailyPlans&quot;: [
+    {
+      &quot;day&quot;: 1,
+      &quot;theme&quot;: &quot;主题&quot;,
+      &quot;schedule&quot;: [
+        { &quot;time&quot;: &quot;上午&quot;, &quot;activity&quot;: &quot;活动&quot;, &quot;location&quot;: &quot;地点&quot;, &quot;transport&quot;: &quot;交通&quot;, &quot;cost&quot;: 100, &quot;category&quot;: &quot;分类&quot;, &quot;tips&quot;: &quot;提示&quot; }
+      ],
+      &quot;dailyBudget&quot;: 500
+    }
+  ],
+  &quot;foodList&quot;: [{ &quot;name&quot;: &quot;店名&quot;, &quot;location&quot;: &quot;地点&quot;, &quot;avgPrice&quot;: 80, &quot;mustTry&quot;: &quot;必点&quot;, &quot;tips&quot;: &quot;备注&quot; }],
+  &quot;hotelTips&quot;: [{ &quot;area&quot;: &quot;区域&quot;, &quot;priceRange&quot;: &quot;价位&quot;, &quot;reason&quot;: &quot;理由&quot; }],
+  &quot;warnings&quot;: [&quot;提醒1&quot;, &quot;提醒2&quot;],
+  &quot;budgetSummary&quot;: { &quot;accommodation&quot;: 0, &quot;food&quot;: 0, &quot;transport&quot;: 0, &quot;tickets&quot;: 0, &quot;shopping&quot;: 0, &quot;other&quot;: 0, &quot;total&quot;: 0 }
+}
+</code></pre>
+<p><strong>说明</strong>:</p>
+<ul>
+<li>该表通过 <code>aiController.js</code> 中的 <code>ensureGuideTable()</code> 方法自动创建（如不存在）</li>
+<li><code>account_book_id</code> 为可选字段，用于关联从攻略一键创建的账本</li>
+<li>更新攻略时，如有关联账本，会自动同步账本的名称、预算、日期等信息</li>
+</ul>
+<hr>
+<h2>常用查询示例</h2>
+<h3>1. 获取用户的所有账本（按创建时间倒序）</h3>
+<pre><code class="language-sql">SELECT * FROM account_books 
+WHERE user_id = ? 
+ORDER BY created_at DESC;
+</code></pre>
+<h3>2. 计算账本总支出</h3>
+<pre><code class="language-sql">SELECT SUM(local_amount) as total_expense 
+FROM transactions 
+WHERE account_book_id = ?;
+</code></pre>
+<h3>3. 获取账本的分账统计</h3>
+<pre><code class="language-sql">SELECT 
+  p.id,
+  p.name,
+  SUM(CASE WHEN t.payer_id = p.id THEN t.local_amount ELSE 0 END) as paid,
+  COUNT(DISTINCT tp.transaction_id) as shared_count
+FROM participants p
+LEFT JOIN transactions t ON t.payer_id = p.id AND t.account_book_id = ?
+LEFT JOIN transaction_participants tp ON tp.participant_id = p.id
+WHERE p.account_book_id = ?
+GROUP BY p.id;
+</code></pre>
+<h3>4. 获取个人参与的共同账单</h3>
+<pre><code class="language-sql">SELECT t.* 
+FROM transactions t
+INNER JOIN transaction_participants tp ON tp.transaction_id = t.id
+WHERE tp.participant_id = ? AND t.type = &#39;shared&#39;
+ORDER BY t.transaction_time DESC;
+</code></pre>
+<h3>5. 获取用户的旅行攻略列表</h3>
+<pre><code class="language-sql">SELECT id, title, city, days, budget, travel_type, account_book_id, created_at, updated_at
+FROM travel_guides
+WHERE user_id = ?
+ORDER BY updated_at DESC;
+</code></pre>
+<h2>数据迁移说明</h2>
+<h3>初始化数据库</h3>
+<pre><code class="language-bash">mysql -u root -p travel_accounting &lt; backend/database/schema.sql
+</code></pre>
+<h3>插入测试数据</h3>
+<pre><code class="language-bash">mysql -u root -p travel_accounting &lt; backend/database/seed.sql
+</code></pre>
+<h2>备份与恢复</h2>
+<h3>备份数据库</h3>
+<pre><code class="language-bash">mysqldump -u root -p travel_accounting &gt; backup_$(date +%Y%m%d).sql
+</code></pre>
+<h3>恢复数据库</h3>
+<pre><code class="language-bash">mysql -u root -p travel_accounting &lt; backup_20260311.sql
+</code></pre>
+</div>
+<div class="doc-content" id="test_plan"><h1>测试计划文档</h1>
+<h2>1. 测试范围</h2>
+<p>本测试计划覆盖旅行记账系统的所有核心功能模块，包括：</p>
+<ul>
+<li>用户认证（注册、登录、密码重置、邮箱直接重置密码）</li>
+<li>账本管理（CRUD、封存）</li>
+<li>成员管理（添加、编辑、删除）</li>
+<li>汇率管理（设置、更新）</li>
+<li>交易管理（手动记账、编辑、删除）</li>
+<li>交易权限（成员编辑/删除权限）</li>
+<li>分账结算（计算、结清标记）</li>
+<li>统计分析（分类统计、币种统计）</li>
+<li>个人中心（信息编辑、头像上传）</li>
+<li>AI 旅行攻略（生成、修改、保存、删除、关联账本）</li>
+<li>金额精度（小数计算准确性）</li>
+<li>封存限制（只读状态验证）</li>
+<li>多用户隔离（数据权限）</li>
+</ul>
+<h2>2. 测试策略</h2>
+<h3>2.1 测试层级</h3>
+<table>
+<thead>
+<tr>
+<th>层级</th>
+<th>工具</th>
+<th>覆盖范围</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>E2E UI 测试</td>
+<td>Python + Playwright</td>
+<td>完整用户流程</td>
+</tr>
+<tr>
+<td>API 接口测试</td>
+<td>Python requests</td>
+<td>后端接口逻辑</td>
+</tr>
+<tr>
+<td>集成测试</td>
+<td>Playwright</td>
+<td>前后端联调</td>
+</tr>
+</tbody></table>
+<h3>2.2 测试方法</h3>
+<ul>
+<li><strong>正向测试</strong>：验证正常流程能正确完成</li>
+<li><strong>反向测试</strong>：验证异常输入能正确拒绝</li>
+<li><strong>边界测试</strong>：验证边界值处理（金额精度、空值等）</li>
+<li><strong>权限测试</strong>：验证数据隔离和访问控制</li>
+</ul>
+<h3>2.3 测试数据策略</h3>
+<ul>
+<li>使用独立测试用户（<a href="mailto:pytest@test.com">pytest@test.com</a>）</li>
+<li>每个测试用例创建独立数据，测试后自动清理</li>
+<li>通过 API 预置测试数据，减少 UI 操作依赖</li>
+</ul>
+<h2>3. 测试环境</h2>
+<table>
+<thead>
+<tr>
+<th>项目</th>
+<th>配置</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>操作系统</td>
+<td>macOS / Linux</td>
+</tr>
+<tr>
+<td>浏览器</td>
+<td>Chrome（移动端视口 375×812）</td>
+</tr>
+<tr>
+<td>前端服务</td>
+<td><a href="http://localhost:5173">http://localhost:5173</a></td>
+</tr>
+<tr>
+<td>后端服务</td>
+<td><a href="http://localhost:3000">http://localhost:3000</a></td>
+</tr>
+<tr>
+<td>数据库</td>
+<td>MySQL 8.0（测试库）</td>
+</tr>
+<tr>
+<td>Python</td>
+<td>3.9+</td>
+</tr>
+<tr>
+<td>Node.js</td>
+<td>18+</td>
+</tr>
+</tbody></table>
+<h2>4. 自动化测试框架</h2>
+<h3>4.1 技术栈</h3>
+<ul>
+<li><strong>语言</strong>：Python 3.9+</li>
+<li><strong>测试框架</strong>：pytest</li>
+<li><strong>浏览器自动化</strong>：Playwright</li>
+<li><strong>HTTP 请求</strong>：requests（API 辅助）</li>
+<li><strong>报告生成</strong>：pytest-html / 自定义 HTML 报告</li>
+</ul>
+<h3>4.2 项目结构</h3>
+<pre><code>e2e-tests/
+├── conftest.py              # 公共 fixtures 和辅助函数
+├── test_01_auth.py          # 认证模块测试
+├── test_02_account_book.py  # 账本模块测试
+├── test_03_participant.py   # 成员模块测试
+├── test_04_exchange_rate.py # 汇率模块测试
+├── test_05_transaction.py   # 交易模块测试
+├── test_06_split_bill.py    # 分账模块测试
+├── test_07_statistics.py    # 统计模块测试
+├── test_08_profile.py       # 个人中心测试
+├── test_09_money_accuracy.py # 金额精度测试
+├── test_10_archived_book.py # 封存限制测试
+├── test_11_multi_user.py    # 多用户测试
+├── generate_report.py       # 报告生成脚本
+└── screenshots/             # 失败截图目录
+</code></pre>
+<h3>4.3 核心 Fixtures</h3>
+<pre><code class="language-python">@pytest.fixture(scope=&quot;session&quot;)
+def auth():
+    &quot;&quot;&quot;Session 级别认证，确保测试用户存在&quot;&quot;&quot;
+
+@pytest.fixture
+def logged_in_page(page, auth):
+    &quot;&quot;&quot;已登录的浏览器页面&quot;&quot;&quot;
+
+@pytest.fixture
+def book(auth):
+    &quot;&quot;&quot;创建测试账本，测试后自动清理&quot;&quot;&quot;
+</code></pre>
+<h3>4.4 辅助函数</h3>
+<pre><code class="language-python">def ensure_test_user()        # 确保测试用户存在
+def create_account_book()     # API 创建账本
+def add_participant()         # API 添加成员
+def set_exchange_rate()       # API 设置汇率
+def create_transaction()      # API 创建交易
+def delete_account_book()     # API 删除账本
+</code></pre>
+<h2>5. 测试用例清单</h2>
+<h3>5.1 认证模块 (test_01_auth.py)</h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>用例名称</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>AUTH-001</td>
+<td>邮箱注册成功</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>AUTH-002</td>
+<td>重复邮箱注册失败</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>AUTH-003</td>
+<td>邮箱登录成功</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>AUTH-004</td>
+<td>错误密码登录失败</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>AUTH-005</td>
+<td>未注册账号登录失败</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>AUTH-006</td>
+<td>登录后跳转首页</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>AUTH-007</td>
+<td>退出登录清除 Token</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>AUTH-008</td>
+<td>无 Token 访问受保护页面跳转登录</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>AUTH-009</td>
+<td>邮箱直接重置密码成功</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>AUTH-010</td>
+<td>未注册邮箱重置密码失败</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>AUTH-011</td>
+<td>密码长度不足6位重置失败</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>AUTH-012</td>
+<td>忘记密码弹窗正常弹出和关闭</td>
+<td>P1</td>
+</tr>
+</tbody></table>
+<h3>5.2 账本模块 (test_02_account_book.py)</h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>用例名称</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BOOK-001</td>
+<td>创建账本成功</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>BOOK-002</td>
+<td>账本列表展示</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>BOOK-003</td>
+<td>搜索账本</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>BOOK-004</td>
+<td>编辑账本信息</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>BOOK-005</td>
+<td>删除账本</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>BOOK-006</td>
+<td>账本详情展示</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>BOOK-007</td>
+<td>上传账本封面</td>
+<td>P2</td>
+</tr>
+</tbody></table>
+<h3>5.3 成员模块 (test_03_participant.py)</h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>用例名称</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PART-001</td>
+<td>添加参与人</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>PART-002</td>
+<td>编辑参与人姓名</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>PART-003</td>
+<td>删除参与人</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>PART-004</td>
+<td>参与人列表展示</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>PART-005</td>
+<td>重复姓名参与人处理</td>
+<td>P2</td>
+</tr>
+</tbody></table>
+<h3>5.4 汇率模块 (test_04_exchange_rate.py)</h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>用例名称</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>RATE-001</td>
+<td>设置新币种汇率</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>RATE-002</td>
+<td>更新已有汇率</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>RATE-003</td>
+<td>汇率列表展示</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>RATE-004</td>
+<td>汇率变更后交易金额重算</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>RATE-005</td>
+<td>无效汇率值拒绝</td>
+<td>P1</td>
+</tr>
+</tbody></table>
+<h3>5.5 交易模块 (test_05_transaction.py)</h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>用例名称</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>TXN-001</td>
+<td>创建个人账单</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>TXN-002</td>
+<td>创建共同账单</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>TXN-003</td>
+<td>交易列表展示</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>TXN-004</td>
+<td>编辑交易</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>TXN-005</td>
+<td>删除交易</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>TXN-006</td>
+<td>外币交易自动换算本币</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>TXN-007</td>
+<td>交易分类筛选</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>TXN-008</td>
+<td>指定付款人和参与人</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>TXN-009</td>
+<td>账本成员可编辑他人创建的交易</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>TXN-010</td>
+<td>账本成员可删除他人创建的交易</td>
+<td>P0</td>
+</tr>
+</tbody></table>
+<h3>5.6 分账模块 (test_06_split_bill.py)</h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>用例名称</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>SPLIT-001</td>
+<td>两人均摊计算正确</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>SPLIT-002</td>
+<td>多人均摊计算正确</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>SPLIT-003</td>
+<td>多笔共同账单累计分账</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>SPLIT-004</td>
+<td>标记参与人已结清</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>SPLIT-005</td>
+<td>无共同账单时分账为零</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>SPLIT-006</td>
+<td>个人分账视图展示</td>
+<td>P1</td>
+</tr>
+</tbody></table>
+<h3>5.7 统计模块 (test_07_statistics.py)</h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>用例名称</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>STAT-001</td>
+<td>总支出统计正确</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>STAT-002</td>
+<td>分类统计正确</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>STAT-003</td>
+<td>币种统计正确</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>STAT-004</td>
+<td>个人/共同支出分别统计</td>
+<td>P1</td>
+</tr>
+</tbody></table>
+<h3>5.8 个人中心模块 (test_08_profile.py)</h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>用例名称</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>PROF-001</td>
+<td>查看个人信息</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>PROF-002</td>
+<td>修改昵称</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>PROF-003</td>
+<td>上传头像</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>PROF-004</td>
+<td>修改默认本币</td>
+<td>P2</td>
+</tr>
+<tr>
+<td>PROF-005</td>
+<td>退出登录</td>
+<td>P0</td>
+</tr>
+</tbody></table>
+<h3>5.9 金额精度模块 (test_09_money_accuracy.py)</h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>用例名称</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MONEY-001</td>
+<td>小数金额存储精度</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>MONEY-002</td>
+<td>汇率换算精度</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>MONEY-003</td>
+<td>分账均摊精度（除不尽场景）</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>MONEY-004</td>
+<td>大金额计算不溢出</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>MONEY-005</td>
+<td>零金额处理</td>
+<td>P1</td>
+</tr>
+</tbody></table>
+<h3>5.10 封存限制模块 (test_10_archived_book.py)</h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>用例名称</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>ARCH-001</td>
+<td>封存账本成功</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>ARCH-002</td>
+<td>封存后不能新增交易</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>ARCH-003</td>
+<td>封存后不能编辑交易</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>ARCH-004</td>
+<td>封存后不能删除交易</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>ARCH-005</td>
+<td>封存后不能添加成员</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>ARCH-006</td>
+<td>封存后不能修改汇率</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>ARCH-007</td>
+<td>解除封存后恢复编辑</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>ARCH-008</td>
+<td>封存状态 UI 标识正确</td>
+<td>P1</td>
+</tr>
+</tbody></table>
+<h3>5.11 多用户模块 (test_11_multi_user.py)</h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>用例名称</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>MULTI-001</td>
+<td>用户只能看到自己的账本</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>MULTI-002</td>
+<td>用户不能访问他人账本</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>MULTI-003</td>
+<td>用户不能修改他人数据</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>MULTI-004</td>
+<td>不同用户同名账本互不影响</td>
+<td>P1</td>
+</tr>
+</tbody></table>
+<h3>5.12 AI 旅行攻略模块</h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>用例名称</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>GUIDE-001</td>
+<td>生成旅行攻略成功（填写城市和天数）</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>GUIDE-002</td>
+<td>未填城市或天数生成失败</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>GUIDE-003</td>
+<td>攻略包含每日行程、美食、住宿、避坑、预算</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>GUIDE-004</td>
+<td>保存攻略成功</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>GUIDE-005</td>
+<td>获取攻略列表</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>GUIDE-006</td>
+<td>获取攻略详情</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>GUIDE-007</td>
+<td>AI 修改攻略成功</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>GUIDE-008</td>
+<td>更新已保存的攻略</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>GUIDE-009</td>
+<td>删除攻略</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>GUIDE-010</td>
+<td>一键从攻略创建关联账本</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>GUIDE-011</td>
+<td>更新攻略自动同步关联账本信息</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>GUIDE-012</td>
+<td>用户只能查看自己的攻略</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>GUIDE-013</td>
+<td>AI 功能未配置时返回友好错误提示</td>
+<td>P1</td>
+</tr>
+</tbody></table>
+<h3>5.13 预算展示模块</h3>
+<table>
+<thead>
+<tr>
+<th>编号</th>
+<th>用例名称</th>
+<th>优先级</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>BUDGET-001</td>
+<td>人均预算正确计算（总预算/成员数）</td>
+<td>P0</td>
+</tr>
+<tr>
+<td>BUDGET-002</td>
+<td>进度条显示当前用户消费占比</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>BUDGET-003</td>
+<td>无成员时预算展示为总预算</td>
+<td>P1</td>
+</tr>
+<tr>
+<td>BUDGET-004</td>
+<td>超出预算时进度条变色提醒</td>
+<td>P2</td>
+</tr>
+</tbody></table>
+<h2>6. 运行方式</h2>
+<h3>6.1 环境准备</h3>
+<pre><code class="language-bash"># 安装 Python 依赖
+cd e2e-tests
+pip install pytest playwright requests pytest-html
+
+# 安装浏览器
+playwright install chromium
+
+# 确保前后端服务已启动
+# 后端: cd backend &amp;&amp; npm run dev
+# 前端: cd frontend &amp;&amp; npm run dev
+</code></pre>
+<h3>6.2 运行全部测试</h3>
+<pre><code class="language-bash">cd e2e-tests
+pytest --headed --slow-mo=800
+</code></pre>
+<h3>6.3 运行单个模块</h3>
+<pre><code class="language-bash"># 只运行认证测试
+pytest test_01_auth.py -v
+
+# 只运行分账测试
+pytest test_06_split_bill.py -v
+</code></pre>
+<h3>6.4 生成测试报告</h3>
+<pre><code class="language-bash"># HTML 报告
+pytest --html=report.html --self-contained-html
+
+# 自定义报告
+python generate_report.py
+</code></pre>
+<h3>6.5 失败截图</h3>
+<ul>
+<li>测试失败时自动截图保存到 <code>screenshots/</code> 目录</li>
+<li>截图文件名包含测试用例路径，便于定位问题</li>
+</ul>
+<h3>6.6 CI/CD 集成</h3>
+<pre><code class="language-bash"># 无头模式运行（CI 环境）
+pytest --headless -v --tb=short
+</code></pre>
+</div>
+</div>
+<script>
+function switchTab(id){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.doc-content').forEach(c=>c.classList.remove('active'));
+  document.getElementById(id)?.classList.add('active');
+  const tabs=document.querySelectorAll('.tab');
+  const docs=document.querySelectorAll('.doc-content');
+  for(let i=0;i<docs.length;i++){if(docs[i].id===id){tabs[i]?.classList.add('active');break}}
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+</script>
+</body>
+</html>

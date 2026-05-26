@@ -1,0 +1,198 @@
+﻿.participant-manager {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #f5f5f5;
+}
+
+/* 澶撮儴 */
+.manager-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 16px;
+  background: var(--color-dark);
+  border-bottom: none;
+}
+
+.manager-header h2 {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+  color: white;
+}
+
+.close-btn {
+  color: rgba(255,255,255,0.7);
+  padding: 4px;
+}
+
+/* 鍐呭鍖哄煙 */
+.manager-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+/* 鎴愬憳鍒楄〃鍖哄煙 */
+.participants-section {
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+}
+
+.section-label .icon {
+  font-size: 20px;
+}
+
+.count-badge {
+  font-size: 13px;
+  color: #999;
+  background: #f5f5f5;
+  padding: 4px 12px;
+  border-radius: 12px;
+}
+
+/* 绌虹姸锟?*/
+.empty-participants {
+  text-align: center;
+  padding: 60px 20px;
+  color: #999;
+}
+
+.empty-participants p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+.empty-participants .hint {
+  font-size: 13px;
+  color: #bbb;
+}
+
+/* 鎴愬憳鍒楄〃 */
+.participants-list {
+  margin: 0 -16px;
+}
+
+.participant-item {
+  padding: 12px 16px;
+}
+
+.participant-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #C8E64E 0%, #A8C43A 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.participant-avatar-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.participant-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #333;
+}
+
+.participant-email {
+  color: #999;
+  font-size: 12px;
+}
+
+/* 娣诲姞鎴愬憳鎸夐挳 */
+.add-participant-btn {
+  margin-top: 16px;
+  color: #8BA830;
+  border: 1px dashed #C8E64E;
+  border-radius: 8px;
+  height: 44px;
+  font-size: 15px;
+}
+
+/* 娣诲姞/缂栬緫琛ㄥ崟 */
+.add-participant-form {
+  background: white;
+  padding: 16px;
+  border-radius: 12px;
+  margin-bottom: 16px;
+}
+
+.form-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 16px;
+}
+
+.form-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 20px;
+}
+
+/* 鎻愮ず淇℃伅 */
+.tips-section {
+  background: #E8F5C8;
+  padding: 16px;
+  border-radius: 12px;
+  border-left: 4px solid #C8E64E;
+}
+
+.tips-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #8BA830;
+  margin-bottom: 12px;
+}
+
+.tips-content {
+  font-size: 13px;
+  color: #666;
+  line-height: 1.8;
+}
+
+.tips-content p {
+  margin: 4px 0;
+}
+
+/* 鍒涘缓浜烘爣璇?*/
+.creator-badge {
+  display: inline-block;
+  font-size: 10px;
+  padding: 1px 6px;
+  margin-left: 6px;
+  background: #fff3e0;
+  color: #f57c00;
+  border-radius: 4px;
+  font-weight: 500;
+  vertical-align: middle;
+}

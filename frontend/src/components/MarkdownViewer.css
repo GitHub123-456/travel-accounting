@@ -1,0 +1,250 @@
+/* Markdown 文档渲染样式 */
+.markdown-viewer {
+  font-size: 15px;
+  line-height: 1.8;
+  color: #333;
+  word-break: break-word;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.markdown-viewer h1 {
+  font-size: 28px;
+  font-weight: 700;
+  color: #1A1A2E;
+  margin: 0 0 24px;
+  padding-bottom: 16px;
+  border-bottom: 3px solid #C8E64E;
+  letter-spacing: -0.5px;
+}
+
+.markdown-viewer h1:first-child {
+  margin-top: 0;
+}
+
+.markdown-viewer h2 {
+  font-size: 22px;
+  font-weight: 600;
+  color: #1A1A2E;
+  margin: 36px 0 16px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, rgba(200, 230, 78, 0.1) 0%, rgba(200, 230, 78, 0.05) 100%);
+  border-left: 4px solid #C8E64E;
+  border-radius: 0 8px 8px 0;
+  letter-spacing: -0.3px;
+}
+
+.markdown-viewer h3 {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2D2D44;
+  margin: 28px 0 12px;
+  padding-left: 12px;
+  border-left: 3px solid rgba(200, 230, 78, 0.5);
+}
+
+.markdown-viewer h4 {
+  font-size: 15px;
+  font-weight: 600;
+  color: #2D2D44;
+  margin: 20px 0 8px;
+}
+
+.markdown-viewer p {
+  margin: 12px 0;
+  color: #444;
+}
+
+.markdown-viewer ul, .markdown-viewer ol {
+  margin: 12px 0;
+  padding-left: 24px;
+}
+
+.markdown-viewer li {
+  margin: 6px 0;
+  position: relative;
+}
+
+.markdown-viewer li::marker {
+  color: #C8E64E;
+  font-weight: 600;
+}
+
+.markdown-viewer a {
+  color: #1677FF;
+  text-decoration: none;
+  border-bottom: 1px dashed rgba(22, 119, 255, 0.3);
+  transition: all 0.2s;
+}
+
+.markdown-viewer a:hover {
+  color: #C8E64E;
+  border-bottom-color: #C8E64E;
+}
+
+/* 行内代码 */
+.markdown-viewer .inline-code {
+  background: linear-gradient(135deg, #f5f5f5 0%, #eee 100%);
+  color: #e83e8c;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 13px;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* 代码块 */
+.markdown-viewer .code-block {
+  background: #1A1A2E;
+  color: #E0E0E0;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 20px 0;
+  position: relative;
+  box-shadow: 0 4px 16px rgba(26, 26, 46, 0.15);
+}
+
+.markdown-viewer .code-block::before {
+  content: attr(data-lang);
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(200, 230, 78, 0.15);
+  color: #C8E64E;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 0 0 0 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.markdown-viewer .code-block code {
+  display: block;
+  padding: 20px;
+  overflow-x: auto;
+  font-family: 'Fira Code', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* 表格 */
+.markdown-viewer .table-wrapper {
+  overflow-x: auto;
+  margin: 20px 0;
+  border-radius: 10px;
+  border: 1px solid #e8e8e8;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.markdown-viewer table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.markdown-viewer thead {
+  background: linear-gradient(135deg, #1A1A2E 0%, #2D2D44 100%);
+}
+
+.markdown-viewer thead th {
+  color: #fff;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+}
+
+.markdown-viewer th {
+  padding: 14px 18px;
+  text-align: left;
+  border-bottom: 2px solid #C8E64E;
+}
+
+.markdown-viewer td {
+  padding: 12px 18px;
+  border-bottom: 1px solid #f0f0f0;
+  color: #444;
+}
+
+.markdown-viewer tbody tr {
+  transition: background 0.15s;
+}
+
+.markdown-viewer tbody tr:nth-child(even) {
+  background: #fafafa;
+}
+
+.markdown-viewer tbody tr:hover td {
+  background: rgba(200, 230, 78, 0.08);
+}
+
+.markdown-viewer tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* 引用块 */
+.markdown-viewer blockquote {
+  margin: 20px 0;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, rgba(200, 230, 78, 0.08) 0%, rgba(200, 230, 78, 0.03) 100%);
+  border-left: 4px solid #C8E64E;
+  border-radius: 0 10px 10px 0;
+  color: #555;
+  position: relative;
+}
+
+.markdown-viewer blockquote::before {
+  content: '"';
+  position: absolute;
+  top: -8px;
+  left: 12px;
+  font-size: 48px;
+  color: rgba(200, 230, 78, 0.3);
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+.markdown-viewer blockquote p {
+  margin: 4px 0;
+  padding-left: 20px;
+}
+
+/* 分割线 */
+.markdown-viewer hr {
+  border: none;
+  height: 3px;
+  background: linear-gradient(to right, #C8E64E, rgba(200, 230, 78, 0.2), transparent);
+  margin: 32px 0;
+  border-radius: 2px;
+}
+
+/* 图片 */
+.markdown-viewer img {
+  max-width: 100%;
+  border-radius: 10px;
+  margin: 20px 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+/* 选中文字高亮 */
+.markdown-viewer ::selection {
+  background: #C8E64E;
+  color: #1A1A2E;
+}
+
+/* 滚动条美化 */
+.markdown-viewer .table-wrapper::-webkit-scrollbar,
+.markdown-viewer .code-block::-webkit-scrollbar {
+  height: 6px;
+}
+
+.markdown-viewer .table-wrapper::-webkit-scrollbar-track,
+.markdown-viewer .code-block::-webkit-scrollbar-track {
+  background: #f0f0f0;
+  border-radius: 3px;
+}
+
+.markdown-viewer .table-wrapper::-webkit-scrollbar-thumb,
+.markdown-viewer .code-block::-webkit-scrollbar-thumb {
+  background: #C8E64E;
+  border-radius: 3px;
+}

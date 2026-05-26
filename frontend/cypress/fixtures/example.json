@@ -1,0 +1,9 @@
+{
+  "testUser": {
+    "email": "cypress@test.com",
+    "password": "Cypress123",
+    "nickname": "Cypress测试"
+  },
+  "currencies": ["CNY", "THB", "USD", "EUR", "JPY", "KRW"],
+  "categories": ["餐饮", "交通", "住宿", "购物", "门票", "其他"]
+}

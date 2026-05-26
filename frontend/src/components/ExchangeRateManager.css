@@ -1,0 +1,180 @@
+﻿.exchange-rate-manager {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: #f5f5f5;
+}
+
+.manager-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px;
+  background: var(--color-dark);
+  border-bottom: none;
+  flex-shrink: 0;
+}
+
+.manager-header h2 {
+  font-size: 17px;
+  font-weight: 600;
+  margin: 0;
+  color: white;
+}
+
+.manager-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+}
+
+.rate-tip {
+  font-size: 13px;
+  color: #999;
+  padding: 10px 12px;
+  background: #fafafa;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.rate-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.rate-item-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  background: white;
+  border-radius: 12px;
+}
+
+.rate-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.rate-flag {
+  font-size: 28px;
+}
+
+.rate-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.rate-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.rate-currency {
+  font-size: 16px;
+  font-weight: 600;
+  color: #222;
+}
+
+.rate-name {
+  font-size: 12px;
+  color: #999;
+}
+
+.rate-right {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+}
+
+.rate-value {
+  font-size: 18px;
+  font-weight: 600;
+  color: #8BA830;
+}
+
+.rate-unit {
+  font-size: 12px;
+  color: #999;
+}
+
+.rate-update-time {
+  text-align: center;
+  font-size: 12px;
+  color: #bbb;
+  margin-top: 12px;
+}
+
+.empty-rates {
+  text-align: center;
+  padding: 40px 0;
+  color: #ccc;
+}
+
+/* 榛樿甯佺閫夋嫨 */
+.default-currency-section {
+  background: white;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.currency-chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.currency-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px 6px 6px;
+  border: 1.5px solid #eee;
+  border-radius: 20px;
+  font-size: 13px;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.currency-chip.active {
+  border-color: #8BA830;
+  background: #F5F8E8;
+  color: #8BA830;
+  font-weight: 600;
+}
+
+.chip-icon {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.default-hint {
+  font-size: 12px;
+  color: #999;
+  margin-top: 8px;
+}

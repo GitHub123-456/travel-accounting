@@ -1,0 +1,189 @@
+﻿.profile-page {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+/* 椤堕儴鑳屾櫙 */
+.profile-bg {
+  background: linear-gradient(135deg, #1A1A2E 0%, #2D2D44 100%);
+  padding: 16px 16px 40px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.profile-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.profile-back {
+  padding: 4px;
+  cursor: pointer;
+}
+
+.profile-nav-title {
+  font-size: 17px;
+  font-weight: 500;
+  color: white;
+}
+
+/* 澶村儚 */
+.profile-avatar-section {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  margin-bottom: 14px;
+}
+
+.profile-avatar-wrap {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: 3px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.profile-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.profile-avatar-default {
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.25);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 34px;
+  font-weight: 600;
+}
+
+.profile-avatar-camera {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 22px;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+}
+
+.profile-avatar-uploading {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  border-radius: 50%;
+}
+
+.profile-name {
+  font-size: 20px;
+  font-weight: 600;
+  color: white;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+
+.profile-account {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* 缁熻鍗＄墖 */
+.profile-stats-card {
+  display: flex;
+  align-items: center;
+  background: white;
+  margin: -24px 16px 16px;
+  border-radius: 14px;
+  padding: 20px 0;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+  position: relative;
+  z-index: 1;
+}
+
+.profile-stat-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.profile-stat-value {
+  font-size: 20px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.profile-stat-label {
+  font-size: 12px;
+  color: #b0b0b0;
+}
+
+.profile-stat-divider {
+  width: 1px;
+  height: 32px;
+  background: #f0f0f0;
+}
+
+/* 鍔熻兘鑿滃崟 */
+.profile-menu {
+  margin: 0 16px;
+  background: white;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.profile-menu-item {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  cursor: pointer;
+  transition: background 0.2s;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.profile-menu-item:active {
+  background: #f5f5f5;
+}
+
+.menu-icon {
+  font-size: 22px;
+  margin-right: 14px;
+}
+
+.menu-text {
+  flex: 1;
+  font-size: 15px;
+  color: #2c3e50;
+  font-weight: 400;
+}
+
+.menu-arrow {
+  font-size: 20px;
+  color: #ccc;
+}
+
+.profile-menu-item.logout .menu-text {
+  color: #e17055;
+  text-align: center;
+  font-weight: 500;
+}

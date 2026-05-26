@@ -1,0 +1,178 @@
+.login-page {
+  min-height: 100vh;
+  background: var(--color-primary-light);
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-header {
+  text-align: center;
+  padding: 0 0 40px;
+}
+
+.login-header .login-logo-img {
+  width: 100px;
+  height: 100px;
+  margin-bottom: 16px;
+  border-radius: 24px;
+}
+
+.login-header h1 {
+  font-size: 26px;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: 2px;
+  color: var(--color-dark);
+}
+
+.login-header p {
+  font-size: 13px;
+  color: #999;
+}
+
+.login-form-area {
+  width: 100%;
+  max-width: 400px;
+}
+
+.login-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.login-input-wrapper {
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 50px;
+  padding: 0 20px;
+  height: 52px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.login-input-icon {
+  font-size: 18px;
+  color: #bbb;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.login-input-wrapper input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  color: var(--color-dark);
+  background: transparent;
+  height: 100%;
+}
+
+.login-input-wrapper input::placeholder {
+  color: #ccc;
+}
+
+.login-input-wrapper .pwd-eye {
+  cursor: pointer;
+  font-size: 18px;
+  color: #bbb;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 8px;
+}
+
+.login-btn-group {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.login-btn-primary {
+  width: 100%;
+  height: 52px;
+  border-radius: 50px;
+  border: none;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--color-primary);
+  color: var(--color-dark);
+  box-shadow: 0 4px 12px rgba(200, 230, 78, 0.3);
+  transition: all 0.2s;
+}
+
+.login-btn-primary:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.login-btn-primary:disabled {
+  opacity: 0.6;
+}
+
+.login-btn-dark {
+  width: 100%;
+  height: 52px;
+  border-radius: 50px;
+  border: none;
+  font-size: 17px;
+  font-weight: 600;
+  cursor: pointer;
+  background: var(--color-dark);
+  color: white;
+  transition: all 0.2s;
+}
+
+.login-btn-dark:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+.login-links {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.login-links a {
+  color: var(--color-dark);
+  text-decoration: none;
+  font-size: 13px;
+  font-weight: 500;
+  opacity: 0.6;
+}
+
+.login-links a:active {
+  opacity: 1;
+}
+
+.link-divider {
+  margin: 0 12px;
+  color: #ccc;
+}
+
+
+/* 重置密码弹窗 */
+.reset-popup {
+  padding-bottom: 20px;
+}
+
+.reset-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--color-dark);
+  text-align: center;
+  margin-bottom: 6px;
+}
+
+.reset-desc {
+  font-size: 13px;
+  color: #999;
+  text-align: center;
+}
